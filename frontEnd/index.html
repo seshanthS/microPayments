@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <script src="dist/jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+        <label for="keyField">key</label>
+        <input type="text" id = "keyField" value ="paste Your PrivateKey here..."/>
+        <label for="passwordTextEncrypt">password</label>
+        <input type="password" id="passwordTextEncrypt">
+        <input type ="button" id="encryptBtn" value="encrypt And Save" />
+        <!--add divider here-->
+        
+        <form >
+            <h3>SignForm</h3>
+            <label for="keyFileBrowser">select File</label>
+            <input type ="file" id="keyFileBrowser" value = "select the encrypted key file"/>
+            <label for="amountText">Amount</label>
+            <input type="text" name="amount" id="amountText">
+            <br>
+            <label for="passwordText">password</label>
+            <input type = "password" value = password id="passwordText" />
+            <br>
+            <input type="button" value="sign">
+        </form>
+
+        <form>
+            <h3>Create Channel</h3>
+            <label for="keyFileBrowserChannel">select File</label>
+            <input type ="file" id="keyFileBrowserChannel" value = "select the encrypted key file"/>
+            <label for="receiverText">Receiver Address</label>
+            <input type="text" value="receiver" id="receiverText">
+            <br>
+            <label for="passwordText">password</label>
+            <input type = "password" value = password id="passwordText" />
+            <br>
+            <input type="button" value="Create Channel">
+        </form>
+
+        <form>
+            <h3>Verify Amount</h3>
+            <label for="signatureField">signature</label>
+            <input type="text" id="signatureField" value="paste the signature here">
+            <label for="amountVerifyField">amount</label>
+            <input type="text" value="amount" id="amountVerifyField">
+            <input type="button" value="Verify" id="verifyBtn">
+            <div id="Verificationresult"></div>
+        </form>
+        <br><br>
+        <script>
+            $("#encryptBtn").click(encryptKey());
+            
+        </script>
+    </body>
+</html>

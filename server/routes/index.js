@@ -10,7 +10,7 @@ var contractAddress = ""
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
-}
+});
 /*
 	/createChannel - send keystore of sender, receivers's address,amount in ethers
 */
@@ -69,6 +69,7 @@ router.post('/signTransaction',(req,res,next)=>{
   web3.eth.accounts.sign(amountWei, key).then(signature =>{
   	res.send(signature);
   });
+});
 
 router.get('/withdraw',(req,res,next)=>{
   var data = req.body.data;
@@ -84,11 +85,7 @@ router.get('/withdraw',(req,res,next)=>{
 
   var contractInstance = new web3.eth.Contract(abi, contractAddress);
   var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
-  /*
-    TODO :
-     .on('transactionHash'){ updateUi to waiting};
-     .on('receipt'){send receipt};
-  */
+
   var txData = contractInstance.methods.withdraw(channelId, amountHash, amount, signature, r, s, v);
   var txDataEncoded = txData.encodeABI();
 
@@ -114,6 +111,7 @@ router.get('/withdraw',(req,res,next)=>{
 
 	});
   });
+});
 
 router.post('/addEther',(req, res, next)=>{
   var creds = req.body.creds;
@@ -146,7 +144,8 @@ router.post('/addEther',(req, res, next)=>{
   	});
 
 	});
-
-})
+	
+});
+});
 
 module.exports = router;
