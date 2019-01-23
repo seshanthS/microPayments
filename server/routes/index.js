@@ -4,7 +4,7 @@ var Tx = require('ethereumjs-tx')
 var web3Functions = require('./functions.js');
 var abi = require('./abi.js');
 var router = express.Router();
-var httpProviderUrl = "";
+var httpProviderUrl = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97"
 var contractAddress = ""
 
 /* GET home page. */
@@ -60,15 +60,19 @@ router.post('/createChannel',(req,res,next)=>{
 router.post('/signTransaction',(req,res,next)=>{
   var creds = req.body.creds;
   var amount = creds.amount;
-  var key = creds.key;
+  var keyStore = creds.keyStore;
+  var password = creds.password;
 
   var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 
   var amountWei = web3.utils.toWei(amount);
-  
-  web3.eth.accounts.sign(amountWei, key).then(signature =>{
+  web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
+    var key = decryptedAccount.privateKey;
+    web3.eth.accounts.sign(amountWei, key).then(signature =>{
   	res.send(signature);
+    });
   });
+
 });
 
 router.get('/withdraw',(req,res,next)=>{

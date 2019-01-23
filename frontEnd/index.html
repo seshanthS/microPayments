@@ -1,6 +1,10 @@
 <html>
     <head>
         <script src="dist/jquery-3.3.1.min.js"></script>
+       <!--
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src ="js/functions.js"></script>
+       -->
     </head>
     <body>
         <label for="keyField">key</label>
@@ -9,24 +13,32 @@
         <input type="password" id="passwordTextEncrypt">
         <input type ="button" id="encryptBtn" value="encrypt And Save" />
         <!--add divider here-->
+        <br><br>
+        <form>
+        <input type="radio" name="option" value="signOption" onclick="radioClicked(this)" checked >sign
+        <input type="radio" name="option" value="createOption" onclick="radioClicked(this)">create Channel
+        <input type="radio" name="option" value="withdrawOption" onclick="radioClicked(this)">withdraw
+        <input type="radio" name="option" value="verifyOption" onclick="radioClicked(this)">verify<br>
+        </form>
         
-        <form >
+        <form id="signForm">
             <h3>SignForm</h3>
             <label for="keyFileBrowser">select File</label>
-            <input type ="file" id="keyFileBrowser" value = "select the encrypted key file"/>
+            <input type ="file" id="files" name = "files[]" value = "select the encrypted key file"/>
             <label for="amountText">Amount</label>
             <input type="text" name="amount" id="amountText">
             <br>
             <label for="passwordText">password</label>
             <input type = "password" value = password id="passwordText" />
             <br>
-            <input type="button" value="sign">
+            <input type="button" value="sign" id="signBtn">
+            <div id="signatureDisplay"></div>
         </form>
 
-        <form>
+        <form id="channelCreationForm">
             <h3>Create Channel</h3>
             <label for="keyFileBrowserChannel">select File</label>
-            <input type ="file" id="keyFileBrowserChannel" value = "select the encrypted key file"/>
+            <input type ="file" id="files" name = "files[]" value = "select the encrypted key file"/>
             <label for="receiverText">Receiver Address</label>
             <input type="text" value="receiver" id="receiverText">
             <br>
@@ -36,7 +48,11 @@
             <input type="button" value="Create Channel">
         </form>
 
-        <form>
+        <form id="withdrawForm">
+            
+        </form>
+
+        <form id="verifyForm">
             <h3>Verify Amount</h3>
             <label for="signatureField">signature</label>
             <input type="text" id="signatureField" value="paste the signature here">
@@ -46,8 +62,61 @@
             <div id="Verificationresult"></div>
         </form>
         <br><br>
+        <h3>test</h3>
+        <div id="content"></div>
         <script>
+
+            $(document).ready(()=>{
+                //atStartup();
+                $("#signForm").css("display","block")
+                $("#channelCreationForm").css("display","none")
+                $("#verifyForm").css("display","none")
+                $("#withdrawForm").css("display","none")   
+            });
+            function radioClicked(radioBtn){
+                switch(radioBtn.value){
+                    case "signOption" :
+                    console.log("1");
+                    $("#signForm").css("display","block")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                    case "createOption" :
+                    console.log("2")
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","block")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                    case "withdrawOption" :
+                    console.log("2")
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","block")                  
+                    break;
+
+                    case "verifyOption" :
+                    console.log("2")
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","block")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                }
+                 
+            }
+            /*
             $("#encryptBtn").click(encryptKey());
+            $("#signBtn").click(sign());
+            document.getElementById('files').addEventListener('change', readFromFile, false);  
+            
+            */
+
             
         </script>
     </body>
