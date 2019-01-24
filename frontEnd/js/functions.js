@@ -32,9 +32,10 @@ function encryptKey(key, password){
     });
 }
 //read the encryptedKey. returns the encryptedKey object
-function readFromFile(){
+function readFromFile(idOfFileChooser){
     var encryptedKey;
-    var fileInput = document.getElementById('files');
+    var id = idOfFileChooser;
+    var fileInput = document.getElementById(id);
     var fileExtension = /text .paymentKey/;
     var file = fileInput.files[0];
     if(file.type.match(fileExtension)){
@@ -54,8 +55,9 @@ function sendCredsToServer(){
 
 }
 
-function sign(){
-    var keystore = readFromFile();
+function sign(idOfFileChooser){
+    var id = idOfFileChooser;
+    var keystore = readFromFile(id);
     var amount = $("#amountText").val();
     var password = $("#passwordText").val();
     var creds = {
@@ -75,6 +77,16 @@ function sign(){
     });
 }
 
+function verifyAmount(idOfFileChooser){
+    var id = idOfFileChooser;
+    var signature = $("#signatureField").val();
+    var amount = $("#amountVerifyField").val();
+  //  var keystore = readFromFile(id); 
+    var amountHash = web3.eth.accounts.hashMessage(amount);
+    if(amountHash == signature){
+        console.log("Amount Verified")
+    }
+}
 
 /*
 use radioButton to select from {sign, create, withdraw check}

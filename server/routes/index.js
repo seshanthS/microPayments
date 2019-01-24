@@ -119,7 +119,9 @@ router.get('/withdraw',(req,res,next)=>{
 
 router.post('/addEther',(req, res, next)=>{
   var creds = req.body.creds;
-  var provider = new walletProvider(key, httpProviderUrl)
+  var channelId = data.channelId;
+  var privKey  //get keystore then extract the privatekey 
+  var provider = new walletProvider(privKey, httpProviderUrl)
   var web3 = new Web3(Web3.providers.HttpProvider(provider));
   var contractInstance = new web3.eth.Contract(abi, contractAddress);
   var fromAddress = provider.getAddresses();
