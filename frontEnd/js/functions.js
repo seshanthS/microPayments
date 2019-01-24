@@ -82,13 +82,35 @@ function verifyAmount(idOfFileChooser){
     var signature = $("#signatureField").val();
     var amount = $("#amountVerifyField").val();
   //  var keystore = readFromFile(id); 
-    var amountHash = web3.eth.accounts.hashMessage(amount);
-    if(amountHash == signature){
+    var hashOfAmount = web3.eth.accounts.hashMessage(amount);
+    var amountHash = signature.messageHash;
+    if(amountHash == hashOfAmount){
         console.log("Amount Verified")
     }
 }
 
+function withdraw(idOfFileChooser){
+    var id = idOfFileChooser;
+    var keystore = readFromFile(id)
+    var amount = $("#amountTextWithdraw").val();
+    var password = $("#passwordTextWithdraw").val();
+    var channelId = $("#channelIdWithdraw").val();
+    var signature = $("#signatureFieldWithdraw").val();
+    var r = signature.r;
+    var s = signature.s;
+    var v = signature.v;
+    var data = {
+        keyStore: keystore,
+        password: password,
+        channelId: channelId,
+        amount: amount,
+        signature: signature,
+        r: r,
+        s: s,
+        v: v       
+    }
+}
 /*
-use radioButton to select from {sign, create, withdraw check}
-css display: none based on the radiobutton
+TODO
+encrypt the signature file...decrypt it in backend.
 */

@@ -24,7 +24,7 @@
         <form id="signForm">
             <h3>SignForm</h3>
             <label for="keyFileBrowser">select File</label>
-            <input type ="file" id="files" name = "files[]" value = "select the encrypted key file"/>
+            <input type ="file" id="keyFileBrowser" name = "files[]" value = "select the encrypted key file"/>
             <label for="amountText">Amount</label>
             <input type="text" name="amount" id="amountText">
             <br>
@@ -49,7 +49,21 @@
         </form>
 
         <form id="withdrawForm">
-            
+            <h3>WithdrawForm</h3>
+            <label for="keyFileBrowserWithdraw">select File</label>
+            <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"/>
+            <label for="amountTextWithdraw">Amount</label>
+            <input type="text" name="amount" id="amountTextWithdraw">
+            <br>
+            <label for="passwordTextWithdraw">password</label>
+            <input type = "password" value = password id="passwordTextWithdraw" />
+            <br>
+            <label for="channelIdWithdraw">ChannelId</label>
+            <input type = "text" value = channelId id="channelIdWithdraw" />
+            <label for="signatureFieldWithdraw">Signature</label>
+            <input type = "text" value = signature id="signatureFieldWithdraw" />
+            <br>
+            <input type="button" value="withdraw" id="withdrawBtn">
         </form>
 
         <form id="verifyForm">
@@ -62,8 +76,8 @@
             <div id="Verificationresult"></div>
         </form>
         <br><br>
-        <h3>test</h3>
-        <div id="content"></div>
+        <h3>status</h3>
+        <div id="status"></div>
         <script>
 
             $(document).ready(()=>{
@@ -112,8 +126,9 @@
             }
             /*
             $("#encryptBtn").click(encryptKey());
-            $("#signBtn").click(sign('files'));
-            document.getElementById('files').addEventListener('change', readFromFile, false);  
+            $("#withdrawBtn").click(withdraw('keyFileBrowserWithdraw'));
+            $("#signBtn").click(sign('keyFileBrowser'));
+         // not needed   document.getElementById('files').addEventListener('change', readFromFile, false);  
             $("#verifyBtn").click(verifyAmount(signatureField));
             */
 

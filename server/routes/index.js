@@ -78,7 +78,7 @@ router.post('/signTransaction',(req,res,next)=>{
 router.get('/withdraw',(req,res,next)=>{
   var data = req.body.data;
   var keyStore = data.keyStore;
-  var password = creds.password;
+  var password = data.password;
   var channelId = data.channelId;
   var amountHash = data.amountHash;
   var amount = data.amount;	
@@ -86,7 +86,7 @@ router.get('/withdraw',(req,res,next)=>{
   var r = data.r;
   var s = data.s;
   var v = data.v;
-
+  //web3.toAscii()
   var contractInstance = new web3.eth.Contract(abi, contractAddress);
   var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 
