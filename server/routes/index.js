@@ -14,6 +14,16 @@ router.get('/', function(req, res, next) {
 /*
 	/createChannel - send keystore of sender, receivers's address,amount in ethers
 */
+
+router.post('/encryptKey',(req,res,next)=>{
+  var data = req.body.data;
+  var privKey = data.key;
+  var password = req.password;
+  web3.eth.accounts.encrypt(key, password).then(encryptedKey =>{
+    res.send(encryptedKey);
+  });
+})
+
 router.post('/createChannel',(req,res,next)=>{
   //creds contains the decrypted keystore.
   var creds = req.body.creds;
@@ -90,7 +100,7 @@ router.get('/withdraw',(req,res,next)=>{
   var contractInstance = new web3.eth.Contract(abi, contractAddress);
   var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 
-  var txData = contractInstance.methods.withdraw(channelId, amountHash, amount, signature, r, s, v);
+  var txData = contractInstance.methods.withdraw(channelId, amount, signature, r, s, v);
   var txDataEncoded = txData.encodeABI();
 
   web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
