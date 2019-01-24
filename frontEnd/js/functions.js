@@ -13,10 +13,15 @@ function encryptKey(){
      
     var key = $("#keyField").val();
     var password = $("#passwordTextEncrypt").val();
-    console.log("test1")
+
+    var data ={
+        key: key,
+        password: password
+    }
     $.ajax({
-        type: POST,
-        url: "",
+        type: "post",
+        data: data,
+        url: "http://localhost:3000/encryptKey",
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + Date.now() + ".paymentKey";
         var file = new Blob([encryptedKey], {type: "txt"});
