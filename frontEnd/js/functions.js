@@ -1,16 +1,7 @@
 var provider = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97";
-//web3= null;
-//51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
-function atStartup(){
-    //web3 = new Web3();
-    //web3.setProvider(new Web3.providers.HttpProvider(provider));
-    //console.log(web3);
-}
 
-function encryptKey(){
-   
-    //var web3 = new Web3(new Web3.providers.HttpProvider(provider));
-     
+//51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
+function encryptKey(){     
     var key = $("#keyField").val();
     var password = $("#passwordTextEncrypt").val();
 
@@ -18,55 +9,35 @@ function encryptKey(){
         key: key,
         password: password
     }
-    console.log(data);
-    console.log(JSON.stringify(data))
+  
     $.ajax({
         type: "post",
         data: data,
-        url: "http://35.237.253.165:3000/test",
-        //dataType: 'application/json',
-        //responseType: 'json',
+        url: "http://35.237.253.165:3000/encryptKey",
         success: (encryptedKey)=>{
-            var filename = "encryptedKey" + Date.now() + ".paymentKey";
-            console.log(encryptedKey)
-     /*   var file = new Blob([encryptedKey], {type: "txt"});
-        if (window.navigator.msSaveOrOpenBlob) // IE10+
-            window.navigator.msSaveOrOpenBlob(file, filename);
-        else { // Others
-            var a = document.createElement("a"),
-            url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(function() {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);  
-            }, 0); 
-        }*/
+            var filename = "encryptedKey" + encryptedKey.address + ".paymentKey";
+            if(confirm("The encrypted key will download shortly...")){
+                $("#keyField").val("");
+                $("#passwordTextEncrypt").val("");
+                keyStringified = JSON.stringify(encryptedKey);
+                var file = new Blob([keyStringified], {type: "txt"});
+                if (window.navigator.msSaveOrOpenBlob) // IE10+
+                    window.navigator.msSaveOrOpenBlob(file, filename);
+                else { // Others
+                    var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(function() {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);  
+                }, 0); 
+            }
+        }
         }
     });
-    /*web3.eth.accounts.encrypt(key, password).then(encryptedKey =>{
-        //save the encryptedKey to a file...
-        console.log("test2");
-        var filename = "encryptedKey" + Date.now() + ".paymentKey";
-        var file = new Blob([encryptedKey], {type: "txt"});
-        if (window.navigator.msSaveOrOpenBlob) // IE10+
-            window.navigator.msSaveOrOpenBlob(file, filename);
-        else { // Others
-            var a = document.createElement("a"),
-            url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(function() {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);  
-            }, 0); 
-        }
-         
-    });*/
 }
 //read the encryptedKey. returns the encryptedKey object
 function readFromFile(idOfFileChooser){

@@ -17,10 +17,10 @@ router.get('/', function(req, res, next) {
 router.post('/encryptKey',(req,res,next)=>{
   var data = req.body;
   var privKey = data.key;
-  var password = req.password;
-  web3.eth.accounts.encrypt(key, password).then(encryptedKey =>{
+  var password = data.password;
+  var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
+  var encryptedKey = web3.eth.accounts.encrypt(privKey, password)
     res.send(encryptedKey);
-  });
 })
 
 router.post('/createChannel',(req,res,next)=>{

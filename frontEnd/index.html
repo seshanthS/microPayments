@@ -11,7 +11,7 @@
         <input type="text" id = "keyField" />
         <label for="passwordTextEncrypt">password</label>
         <input type="password" id="passwordTextEncrypt">
-        <input type ="button" id="encryptBtn"  onclick="encryptKey()"/>
+        <input type ="button" id="encryptBtn" value="Encrypt And Save" onclick="encryptKey()"/>
         <!--add divider here-->
         <br><br>
         <form>
@@ -83,25 +83,13 @@
         <h3>status</h3>
         <div id="status"></div>
         <script>
-            window.addEventListener('load', first() )
 
-            $(document).ready(()=>{
-              //  atStartup();
-              
-
- 
-              
+            $(document).ready(()=>{                    
                 $("#signForm").css("display","block")
                 $("#channelCreationForm").css("display","none")
                 $("#verifyForm").css("display","none")
                 $("#withdrawForm").css("display","none")   
             });
-
-            function first(){
-                console.log("first")
-                atStartup();
-                
-            }
 /*
             $("#encryptBtn").click(encryptKey());
             $("#createChannelBtn").click(createChannel('keyFileBrowserChannel'));
