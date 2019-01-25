@@ -14,17 +14,22 @@ function encryptKey(){
     var key = $("#keyField").val();
     var password = $("#passwordTextEncrypt").val();
 
-    var data ={
+    var data = {
         key: key,
         password: password
     }
+    console.log(data);
+    console.log(JSON.stringify(data))
     $.ajax({
         type: "post",
         data: data,
-        url: "http://localhost:3000/encryptKey",
+        url: "http://35.237.253.165:3000/test",
+        //dataType: 'application/json',
+        //responseType: 'json',
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + Date.now() + ".paymentKey";
-        var file = new Blob([encryptedKey], {type: "txt"});
+            console.log(encryptedKey)
+     /*   var file = new Blob([encryptedKey], {type: "txt"});
         if (window.navigator.msSaveOrOpenBlob) // IE10+
             window.navigator.msSaveOrOpenBlob(file, filename);
         else { // Others
@@ -38,7 +43,7 @@ function encryptKey(){
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);  
             }, 0); 
-        }
+        }*/
         }
     });
     /*web3.eth.accounts.encrypt(key, password).then(encryptedKey =>{

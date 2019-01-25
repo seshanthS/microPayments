@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 */
 
 router.post('/encryptKey',(req,res,next)=>{
-  var data = req.body.data;
+  var data = req.body;
   var privKey = data.key;
   var password = req.password;
   web3.eth.accounts.encrypt(key, password).then(encryptedKey =>{
