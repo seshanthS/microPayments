@@ -1,5 +1,6 @@
 var provider = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97";
 var reader = new FileReader();
+var signatureReader = new FileReader();
 
 //51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
 function encryptKey(){     
@@ -57,6 +58,19 @@ function readFromFile(idOfFileChooser){
         alert("select file...")
     }else{
         reader.readAsText(file);    
+    }
+    
+}
+
+function readSignatureFromFile(idOfFileChooser){
+    var signature;
+    var id = idOfFileChooser;
+    var fileInput = document.getElementById(id);
+    var file = fileInput.files[0];
+    if(file === undefined){
+        alert("select file...")
+    }else{
+        signatureReader.readAsText(file);    
     }
     
 }
@@ -132,10 +146,21 @@ function withdraw(idOfFileChooser){
     var amount = $("#amountTextWithdraw").val();
     var password = $("#passwordTextWithdraw").val();
     var channelId = $("#channelIdWithdraw").val();
-    var signature = $("#signatureFieldWithdraw").val();
-    var r = signature.r;
-    var s = signature.s;
-    var v = signature.v;
+    var signature = readSignatureFromFile('signatureFieldWithdraw');
+    var r,s,v;
+    reader.onload =()=>{
+        keystore = reader.result;
+    }
+    signatureReader.onload = ()=>{
+        signatureStringified = signatureReader.result;
+        signatureObject = JSON.parse(signatureStringified);
+
+        r = signatureObject.r
+        s = signatureObject.s;
+        v = signatureObject.v;
+        signature = signatureObject.signature;
+    }
+   
     var data = {
         keyStore: keystore,
         password: password,
@@ -150,7 +175,7 @@ function withdraw(idOfFileChooser){
     $.ajax({
         type: "POST",
         data: data,
-        url: "",
+        url: "http://localhost:3000/withdraw",
         success: (data)=>{
             console.log(data);
             $("#status").innerHtml() = data;

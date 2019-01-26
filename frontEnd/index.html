@@ -39,7 +39,8 @@
         <form id="channelCreationForm">
             <h3>Create Channel</h3>
             <label for="keyFileBrowserChannel">select File</label>
-            <input type ="file" id="keyFileBrowserChannel" name = "files[]" value = "select the encrypted key file"/>
+            <input type ="file" id="keyFileBrowserChannel" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
             <label for="passwordText">password</label>
             <input type = "password" value = password id="passwordText" />
             <br>
@@ -56,7 +57,8 @@
         <form id="withdrawForm">
             <h3>WithdrawForm</h3>
             <label for="keyFileBrowserWithdraw">select File</label>
-            <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"/>
+            <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
             <label for="amountTextWithdraw">Amount</label>
             <input type="number" name="amount" id="amountTextWithdraw">
             <br>
@@ -64,9 +66,10 @@
             <input type = "password" value = password id="passwordTextWithdraw" />
             <br>
             <label for="channelIdWithdraw">ChannelId</label>
-            <input type = "text" value = channelId id="channelIdWithdraw" />
-            <label for="signatureFieldWithdraw">Signature</label>
-            <input type = "text" value = signature id="signatureFieldWithdraw" />
+            <input type = "number" id="channelIdWithdraw" />
+            <label for="signatureFieldWithdraw">select File</label>
+            <input type ="file" id="signatureFieldWithdraw" name = "files[]" value = "select the signature file"
+            accept=".signature"/>
             <br>
             <input type="button" value="withdraw" id="withdrawBtn" onclick="withdraw('keyFileBrowserWithdraw')">
         </form>
@@ -137,9 +140,6 @@
                 }
                  
             }
-            
-                     
-
             
         </script>
     </body>

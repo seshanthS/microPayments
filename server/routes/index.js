@@ -25,7 +25,7 @@ router.post('/encryptKey',(req,res,next)=>{
 
 router.post('/createChannel',(req,res,next)=>{
   //creds contains the decrypted keystore.
-  var creds = req.body.creds;
+  var creds = req.body;
   //amount in ethers, i.e amount = 2; 2 ethers nu koduka venam.
   var amount = creds.amount;
   var keyStore = creds.keyStore;
@@ -38,28 +38,26 @@ router.post('/createChannel',(req,res,next)=>{
   var txData = contractInstance.methods.createChannel(sender, receiver);
   var txDataEncoded = txData.encodeABI();
 
-  web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
+  var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password)
   	var sender = decryptedAccount.address;
   	var key = new Buffer(decryptedAccount.privateKey, 'hex');
   	web3.eth.getTransactionCount(sender).then(txCount=>{
-  	var rawTx = {
-  		from: sender,
-  		to: contractAddress,
-  		nonce: count,
-  		data: txDataEncoded,
-  		gasPrice: 210000,
-        gasLimit: 60000000000,
-  	}
-  	var tx = new Tx(rawTx);
-  	tx.sign(key);
+  	  var rawTx = {
+  	  	from: sender,
+  	  	to: contractAddress,
+  	  	nonce: count,
+  	  	data: txDataEncoded,
+  	  	gasPrice: 210000,
+          gasLimit: 60000000000,
+  	  }
+  	  var tx = new Tx(rawTx);
+  	  tx.sign(key);
 
-  	var serializedTx = tx.serialize();
-  	web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
-  		res.send(receipt);
-  	});
-
-	});
-  });
+  	  var serializedTx = tx.serialize();
+  	  web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
+  	  	res.send(receipt);
+  	  });
+    });
 });
 
 router.post('/signTransaction',(req,res,next)=>{
@@ -88,44 +86,41 @@ router.get('/verifyAmount',(req,res,next)=>{
 })
 
 router.post('/withdraw',(req,res,next)=>{
-  var data = req.body.data;
+  var data = req.body;
   var keyStore = data.keyStore;
   var password = data.password;
   var channelId = data.channelId;
   var amountHash = data.amountHash;
   var amount = data.amount;	
-  var signature = data.signature;
+  
+  var contractInstance = new web3.eth.Contract(abi, contractAddress);
+  var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
   var r = data.r;
   var s = data.s;
   var v = data.v;
-  //web3.toAscii()
-  var contractInstance = new web3.eth.Contract(abi, contractAddress);
-  var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
-
+  var signature = data.signature;
+  
   var txData = contractInstance.methods.withdraw(channelId, amount, signature, r, s, v);
   var txDataEncoded = txData.encodeABI();
 
-  web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
-  	var sender = decryptedAccount.address;
-  	var key = new Buffer(decryptedAccount.privateKey, 'hex');
-  	web3.eth.getTransactionCount(sender).then(txCount=>{
-  	var rawTx = {
-  		from: sender,
-  		to: contractAddress,
-  		nonce: count,
-  		data: txDataEncoded,
-  		gasPrice: 210000,
-        gasLimit: 60000000000,
-  	}
-  	var tx = new Tx(rawTx);
-  	tx.sign(key);
-
-  	var serializedTx = tx.serialize();
-  	web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
-  		res.send(receipt);
-  	});
-
-	});
+  var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password)
+  var sender = decryptedAccount.address;
+  var key = new Buffer(decryptedAccount.privateKey, 'hex');
+  web3.eth.getTransactionCount(sender).then(txCount=>{
+    var rawTx = {
+    	from: sender,
+    	to: contractAddress,
+    	nonce: count,
+    	data: txDataEncoded,
+    	gasPrice: 210000,
+      gasLimit: 60000000000,
+    }
+    var tx = new Tx(rawTx);
+    tx.sign(key);
+    var serializedTx = tx.serialize();
+    web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
+    	res.send(receipt);
+    });
   });
 });
 
@@ -141,29 +136,28 @@ router.post('/addEther',(req, res, next)=>{
   var txData = contractInstance.methods.addEtherToChannel(channelId);
   var txDataEncoded = txData.encodeABI();
 
-  web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
-  	var sender = decryptedAccount.address;
-  	var key = new Buffer(decryptedAccount.privateKey, 'hex');
-  	web3.eth.getTransactionCount(sender).then(txCount=>{
-  	var rawTx = {
-  		from: sender,
-  		to: contractAddress,
-  		nonce: count,
-  		data: txDataEncoded,
-  		gasPrice: 210000,
+  var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password)
+  var sender = decryptedAccount.address;
+  var key = new Buffer(decryptedAccount.privateKey, 'hex');
+  web3.eth.getTransactionCount(sender).then(txCount=>{
+    var rawTx = {
+    	from: sender,
+    	to: contractAddress,
+    	nonce: count,
+    	data: txDataEncoded,
+    	gasPrice: 210000,
         gasLimit: 60000000000,
-  	}
-  	var tx = new Tx(rawTx);
-  	tx.sign(key);
-
-  	var serializedTx = tx.serialize();
-  	web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
-  		res.send(receipt);
-  	});
+    }
+    var tx = new Tx(rawTx);
+    tx.sign(key);
+    var serializedTx = tx.serialize();
+    web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
+    	res.send(receipt);
+    });
 
 	});
 	
 });
-});
+
 
 module.exports = router;
