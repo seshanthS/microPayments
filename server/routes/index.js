@@ -1,11 +1,12 @@
 var express = require('express');
 var Web3 = require('web3');
 var Tx = require('ethereumjs-tx')
+var abi = require('./abi.js');
 //var web3Functions = require('./functions.js');
 var router = express.Router();
 var httpProviderUrl = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97"
-var contractAddress = ""
-var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
+var contractAddress = "0xcD0d8bbaD3f418f03965C4f9907254cFaD2cEA3C"
+//var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -31,32 +32,49 @@ router.post('/createChannel',(req,res,next)=>{
   var keyStore = creds.keyStore;
   var receiver = creds.receiver;
   var password = creds.password;
-  var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
+  var web3 = new Web3(new Web3.providers.HttpProvider(httpProviderUrl));
 
   var amountInWei = web3.utils.toWei(amount);
-  var contractInstance = new web3.eth.Contract(abi,contractAddress);
-  var txData = contractInstance.methods.createChannel(sender, receiver);
-  var txDataEncoded = txData.encodeABI();
-
+  
   var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password)
-  	var sender = decryptedAccount.address;
-  	var key = new Buffer(decryptedAccount.privateKey, 'hex');
+    var sender = decryptedAccount.address;
+    console.log(sender)
+    
+  	var key = new Buffer(decryptedAccount.privateKey.substring(2,66), 'hex');
   	web3.eth.getTransactionCount(sender).then(txCount=>{
+      var contractInstance = new web3.eth.Contract(abi,contractAddress, {from: sender, gasLimit:60000000000});
+      var txData = contractInstance.methods.createChannel(sender, receiver);
+      var txDataEncoded = txData.encodeABI();
+
   	  var rawTx = {
   	  	from: sender,
   	  	to: contractAddress,
-  	  	nonce: count,
+  	  	nonce: txCount,
   	  	data: txDataEncoded,
-  	  	gasPrice: 210000,
-          gasLimit: 60000000000,
+  	  	gasPrice: 2100000000,
+          gasLimit: 3000000,
   	  }
   	  var tx = new Tx(rawTx);
   	  tx.sign(key);
 
   	  var serializedTx = tx.serialize();
-  	  web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
-  	  	res.send(receipt);
-  	  });
+      web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+      .on('transactionHash', (transactionHash)=>{
+        res.io.emit("transactionHash",transactionHash);
+      })
+      .on('receipt',(receipt)=>{
+        console.log(receipt)
+        res.io.emit("receipt",receipt);
+        res.send(receipt);
+      }).on('error',(err)=>{
+        res.io.emit("error",err);
+        res.end();
+      })
+      .catch(errorMsg=>{
+        console.log(errorMsg)
+      });
+    }).catch(errorMsg=>{
+      console.log(errorMsg);
     });
 });
 
@@ -119,6 +137,7 @@ router.post('/withdraw',(req,res,next)=>{
     tx.sign(key);
     var serializedTx = tx.serialize();
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt',(receipt)=>{
+      console.log(receipt)
     	res.send(receipt);
     });
   });

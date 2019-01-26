@@ -1,7 +1,7 @@
 <html>
     <head>
         <script src="dist/jquery-3.3.1.min.js"></script>
-       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
         <script type="text/javascript" src="dist/web3.js"></script>
         <script type="text/javascript" src ="js/functions.js"></script>
        
@@ -87,6 +87,25 @@
         <h3>status</h3>
         <div id="status"></div>
         <script>
+            //todo display modal dialog to show statusclear
+            var socket = io('http://localhost:3000');
+            socket.on('transactionHash', function (transactionHash) {
+            console.log(transactionHash);
+            alert("Transaction Started \n TransactionHash: " + transactionHash)
+            });
+
+            socket.on('receipt', function (receipt) {
+            console.log(receipt);
+            delete(alert);
+            var receiptStringified = JSON.stringify(receipt)
+            alert("Transaction Successful \n Receipt: " + receiptStringified)
+            });
+
+            socket.on('error', function (err) {
+            console.log(err);
+            var errString = JSON.stringify(err)
+            alert("An error occured :( \n " + errString)
+            });
 
             $(document).ready(()=>{                    
                 $("#signForm").css("display","block")

@@ -1,3 +1,9 @@
+.secret
+.vscode/
+microPayments.sublime-project
+microPayments.sublime-workspace
+test/
+
 # Logs
 logs
 *.log

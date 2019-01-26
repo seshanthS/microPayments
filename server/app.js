@@ -8,6 +8,13 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+var server = require('http').Server(app)
+var io = require('socket.io')(server);
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -22,4 +29,4 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-module.exports = app;
+module.exports = {app: app,server: server};

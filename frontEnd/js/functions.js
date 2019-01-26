@@ -3,6 +3,7 @@ var reader = new FileReader();
 var signatureReader = new FileReader();
 
 //51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
+
 function encryptKey(){     
     var key = $("#keyField").val();
     var password = $("#passwordTextEncrypt").val();
@@ -148,40 +149,43 @@ function withdraw(idOfFileChooser){
     var channelId = $("#channelIdWithdraw").val();
     var signature = readSignatureFromFile('signatureFieldWithdraw');
     var r,s,v;
+    var data;
     reader.onload =()=>{
         keystore = reader.result;
-    }
-    signatureReader.onload = ()=>{
-        signatureStringified = signatureReader.result;
-        signatureObject = JSON.parse(signatureStringified);
+        signatureReader.onload = ()=>{
+            signatureStringified = signatureReader.result;
+            signatureObject = JSON.parse(signatureStringified);
+    
+            r = signatureObject.r
+            s = signatureObject.s;
+            v = signatureObject.v;
+            signature = signatureObject.signature;
 
-        r = signatureObject.r
-        s = signatureObject.s;
-        v = signatureObject.v;
-        signature = signatureObject.signature;
-    }
-   
-    var data = {
-        keyStore: keystore,
-        password: password,
-        channelId: channelId,
-        amount: amount,
-        signature: signature,
-        r: r,
-        s: s,
-        v: v       
-    }
-
-    $.ajax({
-        type: "POST",
-        data: data,
-        url: "http://localhost:3000/withdraw",
-        success: (data)=>{
+            data = {
+                keyStore: keystore,
+                password: password,
+                channelId: channelId,
+                amount: amount,
+                signature: signature,
+                r: r,
+                s: s,
+                v: v       
+            }
             console.log(data);
-            $("#status").innerHtml() = data;
-        }
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: "http://localhost:3000/withdraw",
+                success: (data)=>{
+                    console.log(data);
+                    $("#status").innerHtml = data;
+                }
 
-    });
+            });
+        }
+       
+    }
+    
 }
 
 function createChannel(idOfFileChooser){
@@ -190,23 +194,30 @@ function createChannel(idOfFileChooser){
     var password = $("#passwordText").val();
     var receiver = $("#receiverText").val();
     var amount = $("#amountChannel").val();
-    var creds = {
-        keyStore: keystore,
-        receiver: receiver,
-        password: password,
-        amount: amount
-    }
-
-    $.ajax({
-        type: "POST",
-        data: creds,
-        url: "",
-        success: (data)=>{
-            console.log(data);
-            $("#status").innerHtml() = data;
+    reader.onload =()=>{
+        keystore = reader.result;
+        var creds = {
+            keyStore: keystore,
+            receiver: receiver,
+            password: password,
+            amount: amount
         }
+        $.ajax({
+            type: "POST",
+            data: creds,
+            url: "http://localhost:3000/createChannel",
+            success: (data)=>{
+                console.log(data);
+                $("#status").innerHtml() = data;
+            }
+    
+        });
 
-    });
+        
+        }
+    
+
+    
 }
 /*
 TODO
