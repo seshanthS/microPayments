@@ -1,4 +1,5 @@
 var provider = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97";
+var reader = new FileReader();
 
 //51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
 function encryptKey(){     
@@ -13,7 +14,8 @@ function encryptKey(){
     $.ajax({
         type: "post",
         data: data,
-        url: "http://35.237.253.165:3000/encryptKey",
+        //url: "http://35.237.253.165:3000/encryptKey",
+        url: "http://localhost:3000/encryptKey",
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + encryptedKey.address + ".paymentKey";
             if(confirm("The encrypted key will download shortly...")){
@@ -21,7 +23,15 @@ function encryptKey(){
                 $("#passwordTextEncrypt").val("");
                 keyStringified = JSON.stringify(encryptedKey);
                 var file = new Blob([keyStringified], {type: "txt"});
-                if (window.navigator.msSaveOrOpenBlob) // IE10+
+                
+                downloadFile(file, filename)
+            }
+        }
+    });
+}
+
+function downloadFile(file, filename){
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
                     window.navigator.msSaveOrOpenBlob(file, filename);
                 else { // Others
                     var a = document.createElement("a"),
@@ -33,30 +43,22 @@ function encryptKey(){
                     setTimeout(function() {
                         document.body.removeChild(a);
                         window.URL.revokeObjectURL(url);  
-                }, 0); 
-            }
-        }
-        }
-    });
+                    }, 0); 
+                }
 }
+
 //read the encryptedKey. returns the encryptedKey object
 function readFromFile(idOfFileChooser){
     var encryptedKey;
     var id = idOfFileChooser;
     var fileInput = document.getElementById(id);
-    var fileExtension = /text .paymentKey/;
     var file = fileInput.files[0];
-    if(file.type.match(fileExtension)){
-    var reader = new FileReader();
-    reader.onload = ()=>{
-        encryptedKey = reader.result;
-        return encryptedKey;
-   }
-    
-    }else {
-        alert("Invalid File...")
+    if(file === undefined){
+        alert("select file...")
+    }else{
+        reader.readAsText(file);    
     }
-    reader.readAsText(file)
+    
 }
 
 function sendCredsToServer(){
@@ -65,37 +67,63 @@ function sendCredsToServer(){
 
 function sign(idOfFileChooser){
     var id = idOfFileChooser;
+    
     var keystore = readFromFile(id);
-    var amount = $("#amountText").val();
-    var password = $("#passwordText").val();
-    var creds = {
-        keyStore: keystore,
-        amount: amount,
-        password: password
-    }
-    $.ajax({
-        type: "POST",
-        data: creds,
-        url: "",
-        success: (data)=>{
-            console.log(data);
-            $("#signatureDisplay").innerHtml() = data;
+    reader.onload = ()=>{
+        
+        keystore = reader.result;
+        var amount = $("#amountText").val();
+        var password = $("#passwordText").val();
+        var creds = {
+            keyStore: keystore,
+            amount: amount,
+            password: password
         }
-
-    });
+        console.log(creds)
+        if( amount == "" || password=="" || keystore == "")
+            alert("Complete all the fields")  
+        else{
+            $.ajax({
+                type: "POST",
+                data: creds,
+                url: "http://localhost:3000/signTransaction",
+                success: (signature)=>{
+                    console.log(signature);
+                    var signatureStrigified = JSON.stringify(signature)
+                    var file = new Blob([signatureStrigified], {type: "txt"});
+                    var filename = "signature.signature";
+                    $("#signatureDisplay").html = signatureStrigified;
+                    //use json.parse() before using the siganture 
+                    downloadFile(file, filename);
+                }
+            });
+        }
+    }
+  
 }
 
 function verifyAmount(idOfFileChooser){
     var id = idOfFileChooser;
-    var signature = $("#signatureField").val();
     var amount = $("#amountVerifyField").val();
-  //  var keystore = readFromFile(id); 
-    var hashOfAmount = web3.eth.accounts.hashMessage(amount);
-   /* var amountHash = signature.messageHash;
-    if(amountHash == hashOfAmount){
-        console.log("Amount Verified")
-    }*/
-    console.log(hashOfAmount);
+    var signatureStrigified = readFromFile(id);
+   
+    reader.onload = ()=>{
+        signatureStrigified = reader.result;
+       
+        $.ajax({
+            type: "get",
+            url: "http://localhost:3000/verifyAmount?amount=" + amount ,
+            success: (amountHash)=>{
+                var siganture = JSON.parse(signatureStrigified);
+                var hashOfAmount = siganture.messageHash;
+                if(amountHash == hashOfAmount){
+                    console.log("Amount Verified")
+                    alert("Amount Verified \n" + "Amount: " + amount +"\n Hash: " + amountHash)
+                }
+            }
+        });
+    }
+    
 }
 
 function withdraw(idOfFileChooser){

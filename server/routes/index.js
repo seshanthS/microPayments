@@ -5,7 +5,7 @@ var Tx = require('ethereumjs-tx')
 var router = express.Router();
 var httpProviderUrl = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97"
 var contractAddress = ""
-
+var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -62,12 +62,8 @@ router.post('/createChannel',(req,res,next)=>{
   });
 });
 
-/*
-	send privkey(decrypt keystore in browser), amount.;
-	returns signature;
-*/
 router.post('/signTransaction',(req,res,next)=>{
-  var creds = req.body.creds;
+  var creds = req.body;
   var amount = creds.amount;
   var keyStore = creds.keyStore;
   var password = creds.password;
@@ -75,16 +71,23 @@ router.post('/signTransaction',(req,res,next)=>{
   var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 
   var amountWei = web3.utils.toWei(amount);
-  web3.eth.accounts.decrypt(keyStore, password).then(decryptedAccount=>{
-    var key = decryptedAccount.privateKey;
-    web3.eth.accounts.sign(amountWei, key).then(signature =>{
-  	res.send(signature);
-    });
-  });
+  var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password);
+  var key = decryptedAccount.privateKey;
+  var signature = web3.eth.accounts.sign(amountWei, key)
+  res.send(signature);
+  
 
 });
 
-router.get('/withdraw',(req,res,next)=>{
+router.get('/verifyAmount',(req,res,next)=>{
+  var amount = req.query.amount;
+  var amountInEthers = web3.utils.toWei(amount);
+  var amountHash = web3.eth.accounts.hashMessage(amountInEthers);
+  console.log(amountHash)
+  res.send(amountHash);
+})
+
+router.post('/withdraw',(req,res,next)=>{
   var data = req.body.data;
   var keyStore = data.keyStore;
   var password = data.password;

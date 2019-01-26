@@ -24,15 +24,16 @@
         <form id="signForm">
             <h3>SignForm</h3>
             <label for="keyFileBrowser">select File</label>
-            <input type ="file" id="keyFileBrowser" name = "files[]" value = "select the encrypted key file"/>
+            <input type ="file" id="keyFileBrowser" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
             <label for="amountText">Amount</label>
-            <input type="text" name="amount" id="amountText">
+            <input type="number" name="amount" id="amountText">
             <br>
             <label for="passwordText">password</label>
             <input type = "password" value = password id="passwordText" />
             <br>
             <input type="button" value="sign" id="signBtn" onclick="sign('keyFileBrowser')">
-            <div id="signatureDisplay"></div>
+            <h4 id = "signatureDisplay">test</h4>
         </form>
 
         <form id="channelCreationForm">
@@ -46,7 +47,7 @@
             <input type="text" value="receiver" id="receiverText">
             <br>
             <label for="amountChannel">Amount In Ethers</label>
-            <input type="text" value="amount" id="amountChannel">
+            <input type="number" id="amountChannel">
             <br>
             
             <input type="button" value="Create Channel" id="createChannelBtn" onclick="createChannel('keyFileBrowserChannel')">
@@ -57,7 +58,7 @@
             <label for="keyFileBrowserWithdraw">select File</label>
             <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"/>
             <label for="amountTextWithdraw">Amount</label>
-            <input type="text" name="amount" id="amountTextWithdraw">
+            <input type="number" name="amount" id="amountTextWithdraw">
             <br>
             <label for="passwordTextWithdraw">password</label>
             <input type = "password" value = password id="passwordTextWithdraw" />
@@ -72,11 +73,11 @@
 
         <form id="verifyForm">
             <h3>Verify Amount</h3>
-            <label for="signatureField">signature</label>
-            <input type="text" id="signatureField" value="paste the signature here">
+            <label for="signatureFile">signature File</label>
+            <input type ="file" id="signatureFile" name = "files[]" value = "select the signature file"/>
             <label for="amountVerifyField">amount</label>
-            <input type="text" value="amount" id="amountVerifyField">
-            <input type="button" value="Verify" id="verifyBtn" onclick="verifyAmount(signatureField)">
+            <input type="number"  id="amountVerifyField">
+            <input type="button" value="Verify" id="verifyBtn" onclick="verifyAmount('signatureFile')">
             <div id="Verificationresult"></div>
         </form>
         <br><br>
