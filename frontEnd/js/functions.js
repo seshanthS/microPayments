@@ -1,6 +1,7 @@
 var provider = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97";
 var reader = new FileReader();
 var signatureReader = new FileReader();
+var etherscanApi = "GS6HVQYD1G8ZFVC9C46JV1IJNITEQR763M"
 
 //51BE51046A46421167BE22BFA0730AFE2DC47C5C250F74B9D853DFED87419AE8
 
@@ -156,9 +157,9 @@ function withdraw(idOfFileChooser){
             signatureStringified = signatureReader.result;
             signatureObject = JSON.parse(signatureStringified);
     
-            r = signatureObject.r
-            s = signatureObject.s;
-            v = signatureObject.v;
+            r         = signatureObject.r;
+            s         = signatureObject.s;
+            v         = signatureObject.v;
             signature = signatureObject.signature;
 
             data = {
@@ -166,7 +167,7 @@ function withdraw(idOfFileChooser){
                 password: password,
                 channelId: channelId,
                 amount: amount,
-                signature: signature,
+                signatureFile: signatureStringified,
                 r: r,
                 s: s,
                 v: v       
@@ -193,7 +194,10 @@ function createChannel(idOfFileChooser){
     var keystore = readFromFile(id);
     var password = $("#passwordText").val();
     var receiver = $("#receiverText").val();
-    var amount = $("#amountChannel").val();
+    let amount = $("#amountChannel").val();
+    modal.style.display = "block";
+    $("#dialogTitle").text("Status")
+    $("#dialogContent").text("Transaction is Waiting....")
     reader.onload =()=>{
         keystore = reader.result;
         var creds = {
@@ -208,7 +212,7 @@ function createChannel(idOfFileChooser){
             url: "http://localhost:3000/createChannel",
             success: (data)=>{
                 console.log(data);
-                $("#status").innerHtml() = data;
+                $("#status").text(data);
             }
     
         });

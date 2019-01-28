@@ -6,7 +6,7 @@ pragma solidity >=0.4.21 <0.6.0;
 contract payment{
 
     address owner;
-    uint channelId;
+    uint public channelId;
 
     struct Channel{
         address payable sender;
@@ -22,7 +22,7 @@ contract payment{
     mapping(uint => bool)channelExpired;
     mapping(uint => uint)amountInChannel;
 
-    event channelCreated(address indexed _sender, address indexed _receiver);
+    event channelCreated(address indexed _sender, address indexed _receiver, uint);
 
     constructor(address _owner) public{
         owner = _owner;
@@ -43,8 +43,7 @@ contract payment{
         channel[channelId].expired = false;
         channelExpired[channelId] = false;
         
-        
-        emit channelCreated(_sender, _receiver);
+        emit channelCreated(_sender, _receiver, channelId);
         return channelId;
     }
 

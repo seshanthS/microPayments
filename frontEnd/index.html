@@ -4,9 +4,25 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
         <script type="text/javascript" src="dist/web3.js"></script>
         <script type="text/javascript" src ="js/functions.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+        
        
     </head>
     <body>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <span id = "closeBtn"class="close">&times;</span>
+                  <h2 id = "dialogTitle">Modal Header</h2>
+                </div>
+                <div class="modal-body">
+                  <p id="dialogContent">Some text in the Modal Body</p>
+                  
+                </div>
+            </div>
+        </div>
+
         <label for="keyField">key</label>
         <input type="text" id = "keyField" />
         <label for="passwordTextEncrypt">password</label>
@@ -87,25 +103,6 @@
         <h3>status</h3>
         <div id="status"></div>
         <script>
-            //todo display modal dialog to show statusclear
-            var socket = io('http://localhost:3000');
-            socket.on('transactionHash', function (transactionHash) {
-            console.log(transactionHash);
-            alert("Transaction Started \n TransactionHash: " + transactionHash)
-            });
-
-            socket.on('receipt', function (receipt) {
-            console.log(receipt);
-            delete(alert);
-            var receiptStringified = JSON.stringify(receipt)
-            alert("Transaction Successful \n Receipt: " + receiptStringified)
-            });
-
-            socket.on('error', function (err) {
-            console.log(err);
-            var errString = JSON.stringify(err)
-            alert("An error occured :( \n " + errString)
-            });
 
             $(document).ready(()=>{                    
                 $("#signForm").css("display","block")
@@ -113,7 +110,55 @@
                 $("#verifyForm").css("display","none")
                 $("#withdrawForm").css("display","none")   
             });
-/*
+            //todo display modal dialog to show statusclear
+            var modal = document.getElementById('myModal');
+            var close = document.getElementById('closeBtn');
+
+            var socket = io('http://localhost:3000');
+            socket.on('transactionHash', function (transactionHash) {
+            console.log(transactionHash);
+           // alert("Transaction Started \n TransactionHash: " + transactionHash)
+            $("#dialogContent").text("TransactionHash: " + transactionHash)
+            $("#dialogTitle").text("Transaction Started")
+            modal.style.display = "block";
+            close.style.display = "none"; 
+            });
+
+            socket.on('confirmation',(data)=>{
+                var sender = data.sender;
+                console.log("got Confirmations")
+            });
+
+            socket.on('receipt', function (data) {
+            console.log(data);
+            var receipt = JSON.stringify(data.receipt);
+            //var receiptStringified = JSON.stringify(receipt);
+            modal.style.display = "block";
+            close.style.display = "block"; 
+            $("#dialogContent").text("Transaction Successful \n Receipt: " + receipt);
+            $("#dialogTitle").text("Transaction completed. Please wait for channelId  " )
+           
+            });
+
+            socket.on('channelId', (event)=>{
+                var channelId = JSON.stringify(event.returnValues);
+                console.log("channelId  " + JSON.stringify(event.returnValues))
+                console.log(channelId);
+            });
+
+            socket.on('error', function (err) {
+            console.log(err);
+            var errString = JSON.stringify(err)
+            alert("An error occured :( \n " + errString)
+            $("#dialogContent").text("An error occured :( \n " + errString);
+            $("#dialogTitle").text("Transaction Error")
+            close.style.display = "block"; 
+            });
+
+            $("#closeBtn").click(()=>{
+                modal.style.display = "none";
+            })
+/*          
             $("#encryptBtn").click(encryptKey());
             $("#createChannelBtn").click(createChannel('keyFileBrowserChannel'));
             $("#withdrawBtn").click(withdraw('keyFileBrowserWithdraw'));
