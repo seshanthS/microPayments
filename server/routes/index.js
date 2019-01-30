@@ -114,13 +114,18 @@ router.post('/signTransaction',(req,res,next)=>{
   var keyStore = creds.keyStore;
   var password = creds.password;
 
-  var web3 = new Web3(Web3.providers.WebsocketProvider(wsProvider));
+  var web3 = new Web3(new Web3.providers.WebsocketProvider(wsProvider));
 
   var amountWei = web3.utils.toWei(amount);
   var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password);
   var key = decryptedAccount.privateKey;
   var signature = web3.eth.accounts.sign(amountWei, key)
-  res.send(signature);
+  var senderAddress = web3.eth.accounts.privateKeyToAccount(key)
+  var data = {
+    senderAddress: senderAddress.address,
+    signature: signature
+  }
+  res.send(data);
   
 
 });
@@ -148,19 +153,21 @@ router.post('/withdraw',(req,res,next)=>{
   var web3 = new Web3(new Web3.providers.HttpProvider(httpProviderUrl));
   var contractInstance = new web3.eth.Contract(abi, contractAddress);
   
-  var msgHashString = signatureFile.messageHash;
-  var r = signatureFile.r;
-  var s = signatureFile.s;
-  var vAsHex = web3.utils.asciiToHex(signatureFile.v)//correct 
+  var msgHashString = signatureFile.signature.messageHash;
+  var r = signatureFile.signature.r;
+  var s = signatureFile.signature.s;
+  var vAsHex = web3.utils.asciiToHex(signatureFile.signature.v)//correct 
   //var v = web3.utils.hexToNumber(vAsHex);//correct
-  var v = signatureFile.v;
-  var amountInWei = web3.utils.toWei(amountString);
+  var v = signatureFile.signature.v;
+  var amountInWei = signatureFile.signature.message;
   var amountAsHex = web3.utils.toHex(amountInWei)
   /*
   ==============================================================================
+  var sender = signatureFile.senderAddress;
   var senderAddress = web3.eth.accounts.verify(amountInWei, signature, true)
+  var hashOfMessage = web3.eth.accounts.hashMessage(signatureFile.signature.message)
   //add sender address to signature file(frontEnd)
-  if(data.sender == senderAddress){
+  if((hashOfMessage == messageHash) && data.sender == senderAddress){
     //do every thing here
     //do the transaction here...
   }
