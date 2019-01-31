@@ -55,15 +55,26 @@ contract payment{
     }
 
     
-    function withdraw(uint _channelId, uint amount, bytes32 signature, bytes32 r, bytes32 s, uint8 v)public validChannel(_channelId) {
+    function withdraw(uint _channelId, uint amount,bytes memory amountHash, bytes32 messageHash, bytes32 r, bytes32 s, uint8 v)public validChannel(_channelId) {
         
-        require(ecrecover(signature, v, r, s) == channel[_channelId].sender,"Not a valid signature");
+        //get sha3 hash of amount without prepend(offchain).compare it with keccak value of amount(onchain)
+        //web3.utils.soliditySha3({type: "uint256", value: amount}) == keccak256(amount)
+        require(ecrecover(messageHash, v, r, s) == channel[_channelId].sender,"Not a valid signature");
+
          //senderBalance is (balance in contract - the bill amount);
-         uint senderBalance = channel[_channelId].amount - amount;
-         channel[_channelId].amount = 0;
-         channel[_channelId].receiver.transfer(amount);
-         channel[_channelId].sender.transfer(senderBalance);
-         closeChannel(_channelId);
+         // check the amount by comparing the (hash of amount) with messageHash
+         
+         if(keccak256(amountHash) == messageHash){
+            uint senderBalance = channel[_channelId].amount - amount;
+            channel[_channelId].amount = 0;
+            channel[_channelId].receiver.transfer(amount);
+	    if(senderBalance != 0){
+            	channel[_channelId].sender.transfer(senderBalance);
+	    }
+            closeChannel(_channelId);
+         }
+                 
+         
                
     }
 

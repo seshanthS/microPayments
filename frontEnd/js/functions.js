@@ -151,6 +151,9 @@ function withdraw(idOfFileChooser){
     var signature = readSignatureFromFile('signatureFieldWithdraw');
     var r,s,v;
     var data;
+    modal.style.display = "block";
+    $("#dialogTitle").text("Status")
+    $("#dialogContent").text("Transaction is Waiting....")
     reader.onload =()=>{
         keystore = reader.result;
         signatureReader.onload = ()=>{
@@ -212,7 +215,7 @@ function createChannel(idOfFileChooser){
             url: "http://localhost:3000/createChannel",
             success: (data)=>{
                 console.log(data);
-                $("#status").text(data);
+                //$("#status").text(data);
             }
     
         });

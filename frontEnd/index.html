@@ -15,6 +15,7 @@
                 <div class="modal-header">
                   <span id = "closeBtn"class="close">&times;</span>
                   <h2 id = "dialogTitle">Modal Header</h2>
+                  <h3 id = "channelIdHeading"></h3>
                 </div>
                 <div class="modal-body">
                   <p id="dialogContent">Some text in the Modal Body</p>
@@ -100,7 +101,7 @@
             <div id="Verificationresult"></div>
         </form>
         <br><br>
-        <h3>status</h3>
+        <h3>Channel ID</h3>
         <div id="status"></div>
         <script>
 
@@ -119,6 +120,7 @@
             console.log(transactionHash);
            // alert("Transaction Started \n TransactionHash: " + transactionHash)
             $("#dialogContent").text("TransactionHash: " + transactionHash)
+            $("#channelIdHeading").css("display","none")
             $("#dialogTitle").text("Transaction Started")
             modal.style.display = "block";
             close.style.display = "none"; 
@@ -131,18 +133,23 @@
 
             socket.on('receipt', function (data) {
             console.log(data);
-            var receipt = JSON.stringify(data.receipt);
+            var receipt = JSON.stringify(data);
             //var receiptStringified = JSON.stringify(receipt);
             modal.style.display = "block";
             close.style.display = "block"; 
-            $("#dialogContent").text("Transaction Successful \n Receipt: " + receipt);
-            $("#dialogTitle").text("Transaction completed. Please wait for channelId  " )
+            $("#dialogTitle").text("Transaction Successful ");
+            $("#dialogContent").text("Transaction Hash \n" + data )
            
             });
 
             socket.on('channelId', (event)=>{
-                var channelId = JSON.stringify(event.returnValues);
-                console.log("channelId  " + JSON.stringify(event.returnValues))
+                var channelId = JSON.stringify(event.returnValues[2]);
+                $("#dialogContent").text(" ChannelId: " + channelId);
+                $("#channelIdHeading").text(" ChannelId: " + channelId);
+                $("#dialogTitle").text("Transaction completed." )
+                $("#status").text("channel ID: " + channelId)
+                alert("Note this Value. The ChannelId is: " + channelId);
+                console.log("channelId  " + JSON.stringify(event.returnValues[2]))
                 console.log(channelId);
             });
 

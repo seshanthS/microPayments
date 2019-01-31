@@ -3,20 +3,6 @@ module.exports = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_channelId",
-				"type": "uint256"
-			}
-		],
-		"name": "addEtherToChannel",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
 				"name": "_sender",
 				"type": "address"
 			},
@@ -42,13 +28,31 @@ module.exports = [
 			{
 				"name": "_channelId",
 				"type": "uint256"
+			}
+		],
+		"name": "addEtherToChannel",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_channelId",
+				"type": "uint256"
 			},
 			{
 				"name": "amount",
 				"type": "uint256"
 			},
 			{
-				"name": "signature",
+				"name": "amountHash",
+				"type": "bytes"
+			},
+			{
+				"name": "messageHash",
 				"type": "bytes32"
 			},
 			{
@@ -68,6 +72,20 @@ module.exports = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "channelId",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -102,19 +120,5 @@ module.exports = [
 		],
 		"name": "channelCreated",
 		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "channelId",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
 	}
 ]

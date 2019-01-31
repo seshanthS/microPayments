@@ -8,7 +8,9 @@ var wsProvider = "wss://ropsten.infura.io/ws"
 var httpProviderUrl = "https://ropsten.infura.io/v3/993f7838ddda4a839bf45115b9142a97"
 //var httpProviderUrl = "http://127.0.0.1:8545"
 var contractAddressOld = "0xcD0d8bbaD3f418f03965C4f9907254cFaD2cEA3C"
-var contractAddress = "0x2f18fae6cb7c4930f87c51abd9525c0e49fef3c0"
+//var contractAddress = "0x2f18fae6cb7c4930f87c51abd9525c0e49fef3c0"
+//current:
+var contractAddress = "0x7574bd213951f64ba20fb00caefa87862dffd7a5";
 //var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -73,7 +75,8 @@ router.post('/createChannel',(req,res,next)=>{
          // console.log(err);
           console.log(res);
         }).on('data',(event)=>{
-          console.log("event \n" + JSON.stringify(event));
+  //        console.log("event \n" + JSON.stringify(event));
+          console.log("event \n" + JSON.stringify(event.returnValues[2]))
           res.io.emit('channelId',event);
         });
       
@@ -87,12 +90,9 @@ router.post('/createChannel',(req,res,next)=>{
           receiver: receiver,
           receipt: receipt
         }
-        console.log("data \n " + data)
-       
-
+        console.log("data \n " + JSON.stringify(receipt.transactionHash))
         //console.log("receipt \n " + JSON.stringify(data.receipt))
-        res.io.emit('receipt',data)
-
+        res.io.emit('receipt',receipt.transactionHash)
         res.send(data)
        //event ending
       }).on('error',(err)=>{
@@ -144,8 +144,7 @@ router.post('/withdraw',(req,res,next)=>{
   var keyStore = data.keyStore;
   var password = data.password;
   var channelId = data.channelId;
-  var amountHash = data.amountHash;
-  var amountString = data.amount;	
+  ///var amountString = data.amount;	
   
   var signatureFileAsString = data.signatureFile;
   var signatureFile = JSON.parse(signatureFileAsString);
@@ -160,20 +159,25 @@ router.post('/withdraw',(req,res,next)=>{
   //var v = web3.utils.hexToNumber(vAsHex);//correct
   var v = signatureFile.signature.v;
   var amountInWei = signatureFile.signature.message;
-  var amountAsHex = web3.utils.toHex(amountInWei)
+  var amountAsHex = web3.utils.toHex(amountInWei);
+  var amountHash = web3.utils.stringToHex("\x19Ethereum Signed Message:\n" + amountInWei.length + amountInWei);
+  console.log(amountInWei + "\n");
+  console.log(amountInWei.length )
+  console.log(amountHash);
+  console.log(msgHashString)
   /*
-  ==============================================================================
-  var sender = signatureFile.senderAddress;
-  var senderAddress = web3.eth.accounts.verify(amountInWei, signature, true)
+  //==============================================================================
+  var senderAddressFromSignatureFile = signatureFile.senderAddress;
+  var senderAddress = web3.eth.accounts.recover(amountInWei, signature, true)
   var hashOfMessage = web3.eth.accounts.hashMessage(signatureFile.signature.message)
-  //add sender address to signature file(frontEnd)
+  //Check the sender in signature file and the sender add
   if((hashOfMessage == messageHash) && data.sender == senderAddress){
     //do every thing here
     //do the transaction here...
   }
-  ===============================================================================
+  //===============================================================================
  */
-  var txData = contractInstance.methods.withdraw(channelId, amountAsHex, msgHashString, r, s, v);
+  var txData = contractInstance.methods.withdraw(channelId, amountAsHex, amountHash, msgHashString, r, s, v);
   var txDataEncoded = txData.encodeABI();
 
   var decryptedAccount = web3.eth.accounts.decrypt(keyStore, password)
@@ -197,7 +201,7 @@ router.post('/withdraw',(req,res,next)=>{
     })
     .on('receipt',(receipt)=>{
       console.log(receipt)
-      res.io.emit("receipt",receipt);
+      res.io.emit("receipt",receipt.transactionHash);
     	res.send(receipt);
     }).on('error',(err)=>{
       res.io.emit("error",err);
@@ -245,6 +249,14 @@ router.post('/addEther',(req, res, next)=>{
 	});
 	
 });
+
+router.get("/testHash", (res,req, next)=>{
+  var amount = "700000000000000000";
+  var web3 = new Web3(new Web3.providers.HttpProvider(httpProviderUrl));
+  var test = web3.utils.stringToHex("\x19Ethereum Signed Message:\n" + amount.length + amount);
+  console.log(amount.length)
+  console.log(test);
+})
 
 
 module.exports = router;
