@@ -47,7 +47,7 @@
             <input type="number" name="amount" id="amountText">
             <br>
             <label for="passwordText">password</label>
-            <input type = "password" value = password id="passwordText" />
+            <input type = "password" value = password id="passwordTextSign" />
             <br>
             <input type="button" value="sign" id="signBtn" onclick="sign('keyFileBrowser')">
             <h4 id = "signatureDisplay">test</h4>
@@ -76,8 +76,10 @@
             <label for="keyFileBrowserWithdraw">select File</label>
             <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"
             accept=".paymentKey"/>
+        <!--    
             <label for="amountTextWithdraw">Amount</label>
             <input type="number" name="amount" id="amountTextWithdraw">
+        -->
             <br>
             <label for="passwordTextWithdraw">password</label>
             <input type = "password" value = password id="passwordTextWithdraw" />
