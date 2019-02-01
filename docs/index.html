@@ -2,9 +2,9 @@
     <head>
         <script src="dist/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
-        <script type="text/javascript" src="https://seshanths.github.io/dist/web3.js"></script>
-        <script type="text/javascript" src ="https://seshanths.github.io/js/functions.js"></script>
-        <link rel="stylesheet" href="https://seshanths.github.io/css/style.css">
+        <script type="text/javascript" src="https://seshanths.github.io/microPayments/docs/dist/web3.js"></script>
+        <script type="text/javascript" src ="https://seshanths.github.io/microPayments/docs/js/functions.js"></script>
+        <link rel="stylesheet" href="https://seshanths.github.io/microPayments/docs/css/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
        
     </head>
@@ -108,7 +108,12 @@
         <hr>
       <h1> Documentation </h1>
       <div class = "documentation"> 
-        
+        The objective of this project is to use ethereum for small payments.
+        Every user has to create a "paymentKey" file by pasting their PrivateKey and entering a password. This encrypts your account. You need this file for every Transaction.
+        <br>
+        First a payment channel has to be created between two. Maximum amount is added while creating a channel.
+
+        Not every transaction happens Onchain. Only the final transaction happens Onchain. The user pays by signing a transaction in the "sign tab"
         <ol>
             <li>Paste your key in the "key" field. Enter the password then click encrypt and save </li>
             <li>Save the File. This file represents your account.  </li>
