@@ -108,7 +108,7 @@ function sign(idOfFileChooser){
                     var signatureStrigified = JSON.stringify(signature)
                     var file = new Blob([signatureStrigified], {type: "txt"});
                     var filename = "signature.signature";
-                    $("#signatureDisplay").html = signatureStrigified;
+                    
                     //use json.parse() before using the siganture 
                     downloadFile(file, filename);
                 }
@@ -131,7 +131,7 @@ function verifyAmount(idOfFileChooser){
             url: "http://localhost:3000/verifyAmount?amount=" + amount ,
             success: (amountHash)=>{
                 var siganture = JSON.parse(signatureStrigified);
-                var hashOfAmount = siganture.messageHash;
+                var hashOfAmount = siganture.signature.messageHash;
                 if(amountHash == hashOfAmount){
                     console.log("Amount Verified")
                     alert("Amount Verified \n" + "Amount: " + amount +"\n Hash: " + amountHash)
@@ -218,15 +218,106 @@ function createChannel(idOfFileChooser){
                 //$("#status").text(data);
             }
     
-        });
-
-        
-        }
-    
-
-    
+        });        
+    }   
 }
-/*
-TODO
-encrypt the signature file...decrypt it in backend.
-*/
+
+
+//UI
+$(document).ready(()=>{                    
+               
+                $("#channelCreationForm").css("display","block")
+                $("#signForm").css("display","none")
+                $("#verifyForm").css("display","none")
+                $("#withdrawForm").css("display","none")   
+            });
+            //todo display modal dialog to show statusclear
+            var modal = document.getElementById('myModal');
+            var close = document.getElementById('closeBtn');
+
+            var socket = io('http://localhost:3000');
+            socket.on('transactionHash', function (transactionHash) {
+            console.log(transactionHash);
+           // alert("Transaction Started \n TransactionHash: " + transactionHash)
+            $("#dialogContent").text("TransactionHash: " + transactionHash)
+            $("#channelIdHeading").css("display","none")
+            $("#dialogTitle").text("Transaction Started")
+            modal.style.display = "block";
+            close.style.display = "none"; 
+            });
+
+            socket.on('confirmation',(data)=>{
+                var sender = data.sender;
+                console.log("got Confirmations")
+            });
+
+            socket.on('receipt', function (data) {
+            console.log(data);
+            var receipt = JSON.stringify(data);
+            //var receiptStringified = JSON.stringify(receipt);
+            modal.style.display = "block";
+            close.style.display = "block"; 
+            $("#dialogTitle").text("Transaction Successful ");
+            $("#dialogContent").text("Transaction Hash \n" + data )
+           
+            });
+
+            socket.on('channelId', (event)=>{
+                var channelId = JSON.stringify(event.returnValues[2]);
+                $("#dialogContent").text(" ChannelId: " + channelId);
+                $("#channelIdHeading").text(" ChannelId: " + channelId);
+                $("#dialogTitle").text("Transaction completed." )
+                $("#status").text("channel ID: " + channelId)
+                //alert("Note this Value. The ChannelId is: " + channelId);
+                console.log("channelId  " + JSON.stringify(event.returnValues[2]))
+                console.log(channelId);
+            });
+
+            socket.on('error', function (err) {
+            console.log(err);
+            var errString = JSON.stringify(err)
+            alert("An error occured :( \n " + errString)
+            $("#dialogContent").text("An error occured :( \n " + errString);
+            $("#dialogTitle").text("Transaction Error")
+            close.style.display = "block"; 
+            });
+
+            $("#closeBtn").click(()=>{
+                modal.style.display = "none";
+            });
+
+            function radioClicked(radioBtn){
+                switch(radioBtn.value){
+                    
+
+                    case "createOption" :
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","block")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                    case "signOption" :
+                    $("#signForm").css("display","block")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                    case "withdrawOption" :
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","none")
+                    $("#withdrawForm").css("display","block")                  
+                    break;
+
+                    case "verifyOption" :
+                    $("#signForm").css("display","none")
+                    $("#channelCreationForm").css("display","none")
+                    $("#verifyForm").css("display","block")
+                    $("#withdrawForm").css("display","none")   
+                    break;
+
+                }
+                 
+            }

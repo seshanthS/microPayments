@@ -5,10 +5,11 @@
         <script type="text/javascript" src="dist/web3.js"></script>
         <script type="text/javascript" src ="js/functions.js"></script>
         <link rel="stylesheet" href="css/style.css">
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
        
     </head>
     <body>
+        <h1> MicroPayments Using ETHereum </h1>
 
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -23,24 +24,25 @@
                 </div>
             </div>
         </div>
-
-        <label for="keyField">key</label>
+        <form class = "form-style-9">
+        <label  for="keyField">key</label>
         <input type="text" id = "keyField" />
         <label for="passwordTextEncrypt">password</label>
         <input type="password" id="passwordTextEncrypt">
         <input type ="button" id="encryptBtn" value="Encrypt And Save" onclick="encryptKey()"/>
+        </form>
         <!--add divider here-->
-        <br><br>
-        <form>
-        <input type="radio" name="option" value="signOption" onclick="radioClicked(this)" checked >sign
-        <input type="radio" name="option" value="createOption" onclick="radioClicked(this)">create Channel
+        <hr>
+        <form class = "form-style-9">
+        <input type="radio" name="option" value="createOption" onclick="radioClicked(this)" checked>create Channel
+        <input type="radio" name="option" value="signOption" onclick="radioClicked(this)">sign
         <input type="radio" name="option" value="withdrawOption" onclick="radioClicked(this)">withdraw
         <input type="radio" name="option" value="verifyOption" onclick="radioClicked(this)">verify<br>
         </form>
         
-        <form id="signForm">
+        <form class = "form-style-9" id="signForm">
             <h3>SignForm</h3>
-            <label for="keyFileBrowser">select File</label>
+            <label for="keyFileBrowser">key File</label>
             <input type ="file" id="keyFileBrowser" name = "files[]" value = "select the encrypted key file"
             accept=".paymentKey"/>
             <label for="amountText">Amount</label>
@@ -50,30 +52,30 @@
             <input type = "password" value = password id="passwordTextSign" />
             <br>
             <input type="button" value="sign" id="signBtn" onclick="sign('keyFileBrowser')">
-            <h4 id = "signatureDisplay">test</h4>
+            
         </form>
 
-        <form id="channelCreationForm">
+        <form class = "form-style-9" id="channelCreationForm">
             <h3>Create Channel</h3>
-            <label for="keyFileBrowserChannel">select File</label>
+            <label for="keyFileBrowserChannel">key File</label>
             <input type ="file" id="keyFileBrowserChannel" name = "files[]" value = "select the encrypted key file"
             accept=".paymentKey"/>
             <label for="passwordText">password</label>
             <input type = "password" value = password id="passwordText" />
             <br>
             <label for="receiverText">Receiver Address</label>
-            <input type="text" value="receiver" id="receiverText">
+            <input type="text" id="receiverText">
             <br>
             <label for="amountChannel">Amount In Ethers</label>
             <input type="number" id="amountChannel">
             <br>
-            
+            <div id="status"></div>
             <input type="button" value="Create Channel" id="createChannelBtn" onclick="createChannel('keyFileBrowserChannel')">
         </form>
 
-        <form id="withdrawForm">
+        <form class = "form-style-9" id="withdrawForm">
             <h3>WithdrawForm</h3>
-            <label for="keyFileBrowserWithdraw">select File</label>
+            <label for="keyFileBrowserWithdraw">key File</label>
             <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"
             accept=".paymentKey"/>
         <!--    
@@ -86,134 +88,36 @@
             <br>
             <label for="channelIdWithdraw">ChannelId</label>
             <input type = "number" id="channelIdWithdraw" />
-            <label for="signatureFieldWithdraw">select File</label>
+            <label for="signatureFieldWithdraw">signature File</label>
             <input type ="file" id="signatureFieldWithdraw" name = "files[]" value = "select the signature file"
             accept=".signature"/>
             <br>
             <input type="button" value="withdraw" id="withdrawBtn" onclick="withdraw('keyFileBrowserWithdraw')">
         </form>
 
-        <form id="verifyForm">
+        <form class = "form-style-9" id="verifyForm">
             <h3>Verify Amount</h3>
             <label for="signatureFile">signature File</label>
-            <input type ="file" id="signatureFile" name = "files[]" value = "select the signature file"/>
+            <input type ="file" id="signatureFile" name = "files[]" value = "select the signature file"
+            accept=".signature"/>
             <label for="amountVerifyField">amount</label>
             <input type="number"  id="amountVerifyField">
             <input type="button" value="Verify" id="verifyBtn" onclick="verifyAmount('signatureFile')">
             <div id="Verificationresult"></div>
         </form>
-        <br><br>
-        <h3>Channel ID</h3>
-        <div id="status"></div>
-        <script>
+        <hr>
+      <h1> Documentation </h1>
+      <div class = "documentation"> 
+        
+        <ol>
+            <li>Paste your key in the "key" field. Enter the password then click encrypt and save </li>
+            <li>Save the File. This file represents your account.  </li>
 
-            $(document).ready(()=>{                    
-                $("#signForm").css("display","block")
-                $("#channelCreationForm").css("display","none")
-                $("#verifyForm").css("display","none")
-                $("#withdrawForm").css("display","none")   
-            });
-            //todo display modal dialog to show statusclear
-            var modal = document.getElementById('myModal');
-            var close = document.getElementById('closeBtn');
-
-            var socket = io('http://localhost:3000');
-            socket.on('transactionHash', function (transactionHash) {
-            console.log(transactionHash);
-           // alert("Transaction Started \n TransactionHash: " + transactionHash)
-            $("#dialogContent").text("TransactionHash: " + transactionHash)
-            $("#channelIdHeading").css("display","none")
-            $("#dialogTitle").text("Transaction Started")
-            modal.style.display = "block";
-            close.style.display = "none"; 
-            });
-
-            socket.on('confirmation',(data)=>{
-                var sender = data.sender;
-                console.log("got Confirmations")
-            });
-
-            socket.on('receipt', function (data) {
-            console.log(data);
-            var receipt = JSON.stringify(data);
-            //var receiptStringified = JSON.stringify(receipt);
-            modal.style.display = "block";
-            close.style.display = "block"; 
-            $("#dialogTitle").text("Transaction Successful ");
-            $("#dialogContent").text("Transaction Hash \n" + data )
-           
-            });
-
-            socket.on('channelId', (event)=>{
-                var channelId = JSON.stringify(event.returnValues[2]);
-                $("#dialogContent").text(" ChannelId: " + channelId);
-                $("#channelIdHeading").text(" ChannelId: " + channelId);
-                $("#dialogTitle").text("Transaction completed." )
-                $("#status").text("channel ID: " + channelId)
-                alert("Note this Value. The ChannelId is: " + channelId);
-                console.log("channelId  " + JSON.stringify(event.returnValues[2]))
-                console.log(channelId);
-            });
-
-            socket.on('error', function (err) {
-            console.log(err);
-            var errString = JSON.stringify(err)
-            alert("An error occured :( \n " + errString)
-            $("#dialogContent").text("An error occured :( \n " + errString);
-            $("#dialogTitle").text("Transaction Error")
-            close.style.display = "block"; 
-            });
-
-            $("#closeBtn").click(()=>{
-                modal.style.display = "none";
-            })
-/*          
-            $("#encryptBtn").click(encryptKey());
-            $("#createChannelBtn").click(createChannel('keyFileBrowserChannel'));
-            $("#withdrawBtn").click(withdraw('keyFileBrowserWithdraw'));
-            $("#signBtn").click(sign('keyFileBrowser'));
-         // not needed   document.getElementById('files').addEventListener('change', readFromFile, false);  
-            $("#verifyBtn").click(verifyAmount(signatureField));
-*/
-
-            function radioClicked(radioBtn){
-                switch(radioBtn.value){
-                    case "signOption" :
-                    console.log("1");
-                    $("#signForm").css("display","block")
-                    $("#channelCreationForm").css("display","none")
-                    $("#verifyForm").css("display","none")
-                    $("#withdrawForm").css("display","none")   
-                    break;
-
-                    case "createOption" :
-                    console.log("2")
-                    $("#signForm").css("display","none")
-                    $("#channelCreationForm").css("display","block")
-                    $("#verifyForm").css("display","none")
-                    $("#withdrawForm").css("display","none")   
-                    break;
-
-                    case "withdrawOption" :
-                    console.log("2")
-                    $("#signForm").css("display","none")
-                    $("#channelCreationForm").css("display","none")
-                    $("#verifyForm").css("display","none")
-                    $("#withdrawForm").css("display","block")                  
-                    break;
-
-                    case "verifyOption" :
-                    console.log("2")
-                    $("#signForm").css("display","none")
-                    $("#channelCreationForm").css("display","none")
-                    $("#verifyForm").css("display","block")
-                    $("#withdrawForm").css("display","none")   
-                    break;
-
-                }
-                 
-            }
+        </ol>
+        <div class = "createChannelDocumentation">
             
-        </script>
+        </div>
+
+      </div>
     </body>
 </html>
