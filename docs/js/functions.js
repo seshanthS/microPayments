@@ -224,16 +224,6 @@ function createChannel(idOfFileChooser){
 
 
 //UI
-$(document).ready(()=>{                    
-               
-                $("#channelCreationForm").css("display","block")
-                $("#signForm").css("display","none")
-                $("#verifyForm").css("display","none")
-                $("#withdrawForm").css("display","none")   
-            });
-            //todo display modal dialog to show statusclear
-            var modal = document.getElementById('myModal');
-            var close = document.getElementById('closeBtn');
 
             var socket = io('http://localhost:3000');
             socket.on('transactionHash', function (transactionHash) {
@@ -318,6 +308,5 @@ $(document).ready(()=>{
                     $("#withdrawForm").css("display","none")   
                     break;
 
-                }
-                 
+                }   
             }
