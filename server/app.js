@@ -8,7 +8,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-var server = require('http').Server(app)
+var http1 = require('http')//.Server(app)
+var server = http1.createServer(app)
 var io = require('socket.io')(server);
 app.use(function(req, res, next){
   res.io = io;

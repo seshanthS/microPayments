@@ -18,7 +18,7 @@ function encryptKey(){
         type: "post",
         data: data,
         //url: "http://35.237.253.165:3000/encryptKey",
-        url: "https://3.17.19.247:3000/encryptKey",
+        url: "http://3.17.19.247:3000/encryptKey",
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + encryptedKey.address + ".paymentKey";
             if(confirm("The encrypted key will download shortly...")){
@@ -102,7 +102,7 @@ function sign(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: creds,
-                url: "https://3.17.19.247:3000/signTransaction",
+                url: "http://3.17.19.247:3000/signTransaction",
                 success: (signature)=>{
                     console.log(signature);
                     var signatureStrigified = JSON.stringify(signature)
@@ -128,7 +128,7 @@ function verifyAmount(idOfFileChooser){
        
         $.ajax({
             type: "get",
-            url: "https://3.17.19.247:3000/verifyAmount?amount=" + amount ,
+            url: "http://3.17.19.247:3000/verifyAmount?amount=" + amount ,
             success: (amountHash)=>{
                 var siganture = JSON.parse(signatureStrigified);
                 var hashOfAmount = siganture.signature.messageHash;
@@ -179,7 +179,7 @@ function withdraw(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: data,
-                url: "https://3.17.19.247:3000/withdraw",
+                url: "http://3.17.19.247:3000/withdraw",
                 success: (data)=>{
                     console.log(data);
                     $("#status").innerHtml = data;
@@ -212,7 +212,7 @@ function createChannel(idOfFileChooser){
         $.ajax({
             type: "POST",
             data: creds,
-            url: "https://3.17.19.247:3000/createChannel",
+            url: "http://3.17.19.247:3000/createChannel",
             success: (data)=>{
                 console.log(data);
                 //$("#status").text(data);
@@ -225,7 +225,7 @@ function createChannel(idOfFileChooser){
 
 //UI
 
-            var socket = io('https://3.17.19.247:3000');
+            var socket = io('http://3.17.19.247:3000');
             socket.on('transactionHash', function (transactionHash) {
             console.log(transactionHash);
            // alert("Transaction Started \n TransactionHash: " + transactionHash)
