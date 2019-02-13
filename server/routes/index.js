@@ -133,7 +133,7 @@ router.post('/signTransaction',(req,res,next)=>{
 router.get('/verifyAmount',(req,res,next)=>{
   var amount = req.query.amount;
   
-  var web3 = new Web3(Web3.providers.WebsocketProvider(wsProvider));
+  var web3 = new Web3(new Web3.providers.WebsocketProvider(wsProvider));
   var amountInEthers = web3.utils.toWei(amount);
   var amountHash = web3.eth.accounts.hashMessage(amountInEthers);
   console.log(amountHash)

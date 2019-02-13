@@ -1,0 +1,397 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tr",
+				"transactionHash"
+			],
+			[
+				"chan",
+				"channelIdHeading"
+			],
+			[
+				"channe",
+				"channelIdHeading"
+			],
+			[
+				"string",
+				"stringToHex"
+			],
+			[
+				"amo",
+				"amountInWei"
+			],
+			[
+				"amou",
+				"amountHash"
+			],
+			[
+				"sig",
+				"signature"
+			],
+			[
+				"signature",
+				"signatureFile"
+			],
+			[
+				"msg",
+				"msgHash"
+			],
+			[
+				"signatu",
+				"signatureFile"
+			],
+			[
+				"sign",
+				"signatureFile"
+			],
+			[
+				"si",
+				"signatureFile"
+			],
+			[
+				"amountIn",
+				"amountInWei"
+			],
+			[
+				"signatureS",
+				"signatureStringified"
+			],
+			[
+				"CONTR",
+				"contractInstance"
+			],
+			[
+				"enc",
+				"encryptKey"
+			],
+			[
+				"create",
+				"createOption"
+			],
+			[
+				"radio",
+				"radioBtn"
+			],
+			[
+				"add",
+				"addEventListener"
+			],
+			[
+				"rad",
+				"radioButtons"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"encry",
+				"encryptedKey"
+			],
+			[
+				"file",
+				"fileContents"
+			],
+			[
+				"en",
+				"encryptedKey"
+			],
+			[
+				"key",
+				"keyStore"
+			],
+			[
+				"seria",
+				"serializedTx"
+			],
+			[
+				"contr",
+				"contractAddress"
+			],
+			[
+				"decrypted",
+				"decryptedAccount"
+			],
+			[
+				"re",
+				"receipt"
+			],
+			[
+				"pr",
+				"provider"
+			],
+			[
+				"from",
+				"fromAddress"
+			],
+			[
+				"h",
+				"httpProviderUrl"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"con",
+				"Contract"
+			],
+			[
+				"pro",
+				"provider"
+			],
+			[
+				"a",
+				"amountHash"
+			],
+			[
+				"revce",
+				"receiver"
+			],
+			[
+				"k",
+				"keyStore"
+			],
+			[
+				"chann",
+				"channelId"
+			],
+			[
+				"trans",
+				"transferFunds"
+			],
+			[
+				"functio",
+				"functionAbi"
+			],
+			[
+				"to",
+				"toString"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"regis",
+				"_registerUser"
+			],
+			[
+				"register",
+				"registeredUsers"
+			],
+			[
+				"bo",
+				"body"
+			],
+			[
+				"net",
+				"network_id"
+			],
+			[
+				"vote",
+				"voteCount"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"packa \t",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 150.0,
+		"history":
+		[
+			"ls",
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"Package Control install",
+			"Package Control",
+			"ls",
+			"package control"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/workspace/projects/microPayments"
+	],
+	"file_history":
+	[
+		"/home/workspace/projects/microPayments/frontEnd/index.html",
+		"/home/workspace/projects/microPayments/server/routes/abi.js",
+		"/home/workspace/projects/microPayments/server/routes/index.js",
+		"/home/workspace/projects/microPayments/server/routes/functions.js",
+		"/home/workspace/projects/microPayments/microPayments.sublime-project",
+		"/home/workspace/projects/microPayments/ui/routes/functions.js",
+		"/home/workspace/projects/microPayments/ui/public/javascripts/functions.js",
+		"/home/workspace/projects/microPayments/ui/routes/index.js",
+		"/home/workspace/projects/microPayments/contracts/payment.sol",
+		"/home/workspace/projects/microPayments/migrations/2_deploy_payment.js",
+		"/home/workspace/projects/microPayments/test/1_payment_test.js",
+		"/home/workspace/projects/paymentChannel/public/js/newfile.js",
+		"/home/workspace/projects/paymentChannel/public/js/abi.js",
+		"/home/workspace/ethereum/webui/PetCare/index.html",
+		"/home/workspace/ethereum/webui/token_ui/ui.html",
+		"/home/workspace/ethereum/truffle/PetCare/contracts/petCare.sol",
+		"/home/workspace/ethereum/webui/token_ui/package-lock.json",
+		"/home/workspace/nodejs/expressjs/first/init/views/layout.jade",
+		"/home/workspace/nodejs/expressjs/first/init/routes/index.js",
+		"/home/workspace/ethereum/truffle/token/migrations/2_deploy_contract.js",
+		"/home/workspace/ethereum/truffle/token/truffle.js",
+		"/home/workspace/ethereum/truffle/token/contracts/token.sol",
+		"/home/workspace/hyperledger/projects/callforcode/chaincode/modified/disastermgmt.go"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 28.0
+	},
+	"pinned_build_system": "",
+	"project": "untitled.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 184.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

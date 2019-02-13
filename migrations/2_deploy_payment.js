@@ -1,8 +1,6 @@
 var payment = artifacts.require('payment.sol');
 
-module.exports = async(deployer)=>{
-	var accounts = web3.eth.getAccounts().then((acc)=>{
+module.exports = async(deployer,network, accounts)=>{
 
-    deployer.deploy(payment,acc[0]);
-});
+    deployer.deploy(payment,accounts[0]);
 }
