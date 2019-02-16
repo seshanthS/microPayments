@@ -128,7 +128,7 @@ function verifyAmount(idOfFileChooser){
        
         $.ajax({
             type: "get",
-            url: "http://3.17.19.247:3000/verifyAmount?amount=" + amount ,
+            url: "https://3.17.19.247:3000/verifyAmount?amount=" + amount ,
             success: (amountHash)=>{
                 var siganture = JSON.parse(signatureStrigified);
                 var hashOfAmount = siganture.signature.messageHash;
