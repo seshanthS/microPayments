@@ -18,7 +18,7 @@ function encryptKey(){
         type: "post",
         data: data,
         //url: "http://35.237.253.165:3000/encryptKey",
-        url: "https://3.17.19.247:3000/encryptKey",
+        url: "http://localhost:3000/encryptKey",
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + encryptedKey.address + ".paymentKey";
             if(confirm("The encrypted key will download shortly...")){
@@ -102,11 +102,11 @@ function sign(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: creds,
-                url: "https://3.17.19.247:3000/signTransaction",
+                url: "http://localhost:3000/signTransaction",
                 success: (signature)=>{
                     console.log(signature);
-                    var signatureStrigified = JSON.stringify(signature)
-                    var file = new Blob([signatureStrigified], {type: "txt"});
+                    var signatureStringified = JSON.stringify(signature)
+                    var file = new Blob([signatureStringified], {type: "txt"});
                     var filename = "signature.signature";
                     
                     //use json.parse() before using the siganture 
@@ -121,20 +121,25 @@ function sign(idOfFileChooser){
 function verifyAmount(idOfFileChooser){
     var id = idOfFileChooser;
     var amount = $("#amountVerifyField").val();
-    var signatureStrigified = readFromFile(id);
+    var signatureStringified = readFromFile(id);
    
     reader.onload = ()=>{
-        signatureStrigified = reader.result;
-       
+        signatureStringified = reader.result;
+       //check whether amount is entered
+       if(amount == "" || signatureStringified == "")
+        alert("Complete all the fields")
+       else
         $.ajax({
             type: "get",
-            url: "https://3.17.19.247:3000/verifyAmount?amount=" + amount ,
+            url: "http://localhost:3000/verifyAmount?amount=" + amount ,
             success: (amountHash)=>{
-                var siganture = JSON.parse(signatureStrigified);
+                var siganture = JSON.parse(signatureStringified);
                 var hashOfAmount = siganture.signature.messageHash;
                 if(amountHash == hashOfAmount){
                     console.log("Amount Verified")
                     alert("Amount Verified \n" + "Amount: " + amount +"\n Hash: " + amountHash)
+                }else {
+                    alert("NOT Verified.... Amount Not Matched")
                 }
             }
         });
@@ -179,7 +184,7 @@ function withdraw(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: data,
-                url: "https://3.17.19.247:3000/withdraw",
+                url: "http://localhost:3000/withdraw",
                 success: (data)=>{
                     console.log(data);
                     $("#status").innerHtml = data;
@@ -212,7 +217,7 @@ function createChannel(idOfFileChooser){
         $.ajax({
             type: "POST",
             data: creds,
-            url: "https://3.17.19.247:3000/createChannel",
+            url: "http://localhost:3000/createChannel",
             success: (data)=>{
                 console.log(data);
                 //$("#status").text(data);
@@ -225,7 +230,7 @@ function createChannel(idOfFileChooser){
 
 //UI
 
-            var socket = io('https://3.17.19.247:3000');
+            var socket = io('http://localhost:3000');
             socket.on('transactionHash', function (transactionHash) {
             console.log(transactionHash);
            // alert("Transaction Started \n TransactionHash: " + transactionHash)

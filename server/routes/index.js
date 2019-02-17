@@ -2,6 +2,7 @@ var express = require('express');
 var Web3 = require('web3');
 var Tx = require('ethereumjs-tx')
 var abi = require('./abi.js');
+var path = require('path');
 //var web3Functions = require('./functions.js');
 var router = express.Router();
 var wsProvider = "wss://ropsten.infura.io/ws"
@@ -13,8 +14,10 @@ var contractAddressOld = "0xcD0d8bbaD3f418f03965C4f9907254cFaD2cEA3C"
 var contractAddress = "0x7574bd213951f64ba20fb00caefa87862dffd7a5";
 //var web3 = new Web3(Web3.providers.HttpProvider(httpProviderUrl));
 /* GET home page. */
+
+
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.sendFile(path.join(__dirname,'../../docs','index.html'))
 });
 /*
 	/createChannel - send keystore of sender, receivers's address,amount in ethers
