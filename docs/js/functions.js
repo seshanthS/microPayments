@@ -254,7 +254,7 @@ function createChannel(idOfFileChooser){
             close.style.display = "block"; 
             $("#dialogTitle").text("Transaction Successful ");
             $("#dialogContent").text("Transaction Hash \n" + data )
-           
+            alert('Transaction Completed...Note down "CHANNELID" near "createChannel Button" ');
             });
 
             socket.on('channelId', (event)=>{
