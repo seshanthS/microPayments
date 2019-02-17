@@ -162,7 +162,9 @@
                 $("#withdrawForm").css("display","none")   
                 modal = document.getElementById('myModal');
                 close = document.getElementById('closeBtn');
-
+                $("#closeBtn").click(()=>{
+                modal.style.display = "none";
+            });
             });
       </script>
     </body>
