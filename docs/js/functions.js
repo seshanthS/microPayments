@@ -18,7 +18,7 @@ function encryptKey(){
         type: "post",
         data: data,
         //url: "http://35.237.253.165:3000/encryptKey",
-        url: "http://localhost:3000/encryptKey",
+        url: "/encryptKey",
         success: (encryptedKey)=>{
             var filename = "encryptedKey" + encryptedKey.address + ".paymentKey";
             if(confirm("The encrypted key will download shortly...")){
@@ -102,7 +102,7 @@ function sign(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: creds,
-                url: "http://localhost:3000/signTransaction",
+                url: "/signTransaction",
                 success: (signature)=>{
                     console.log(signature);
                     var signatureStringified = JSON.stringify(signature)
@@ -131,7 +131,7 @@ function verifyAmount(idOfFileChooser){
        else
         $.ajax({
             type: "get",
-            url: "http://localhost:3000/verifyAmount?amount=" + amount ,
+            url: "/verifyAmount?amount=" + amount ,
             success: (amountHash)=>{
                 var siganture = JSON.parse(signatureStringified);
                 var hashOfAmount = siganture.signature.messageHash;
@@ -184,7 +184,7 @@ function withdraw(idOfFileChooser){
             $.ajax({
                 type: "POST",
                 data: data,
-                url: "http://localhost:3000/withdraw",
+                url: "/withdraw",
                 success: (data)=>{
                     console.log(data);
                     $("#status").innerHtml = data;
@@ -217,7 +217,7 @@ function createChannel(idOfFileChooser){
         $.ajax({
             type: "POST",
             data: creds,
-            url: "http://localhost:3000/createChannel",
+            url: "/createChannel",
             success: (data)=>{
                 console.log(data);
                 //$("#status").text(data);
@@ -230,7 +230,7 @@ function createChannel(idOfFileChooser){
 
 //UI
 
-            var socket = io('http://localhost:3000');
+            var socket = io('');
             socket.on('transactionHash', function (transactionHash) {
             console.log(transactionHash);
            // alert("Transaction Started \n TransactionHash: " + transactionHash)
