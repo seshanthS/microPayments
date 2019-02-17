@@ -254,12 +254,13 @@ function createChannel(idOfFileChooser){
             close.style.display = "block"; 
             $("#dialogTitle").text("Transaction Successful ");
             $("#dialogContent").text("Transaction Hash \n" + data )
-            alert('Transaction Completed...Note down "CHANNELID" near "createChannel Button" ');
+            alert('Transaction Completed... ');
             });
 
             socket.on('channelId', (event)=>{
                 var channelId = JSON.stringify(event.returnValues[2]);
-                $("#dialogContent").text(" ChannelId: " + channelId);
+                modal.style.display = "block";
+	        $("#dialogContent").text(" ChannelId: " + channelId);
                 $("#channelIdHeading").text(" ChannelId: " + channelId);
                 $("#dialogTitle").text("Transaction completed." )
                 $("#status").text("channel ID: " + channelId)
