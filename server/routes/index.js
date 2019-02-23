@@ -17,7 +17,7 @@ var contractAddress = "0x7574bd213951f64ba20fb00caefa87862dffd7a5";
 
 
 router.get('/', function(req, res, next) {
-  res.sendFile(path.join(__dirname,'../../docs','index.html'))
+  res.sendFile(path.join(__dirname,'../../docs','home.html'))
 });
 /*
 	/createChannel - send keystore of sender, receivers's address,amount in ethers
