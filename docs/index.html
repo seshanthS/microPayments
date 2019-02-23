@@ -1,39 +1,21 @@
 <html>
     <head>
+
         <script src="public/dist/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
        
         <script type="text/javascript" src ="public/js/functions.js"></script>
         <link rel="stylesheet" href="/public/css/style.css">
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
        
     </head>
     <body>
         <h1> MicroPayments Using ETHereum </h1>
 
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                  <span id = "closeBtn"class="close">&times;</span>
-                  <h2 id = "dialogTitle">Modal Header</h2>
-                  <h3 id = "channelIdHeading"></h3>
-                </div>
-                <div class="modal-body">
-                  <p id="dialogContent">Some text in the Modal Body</p>
-                  
-                </div>
-            </div>
-        </div>
+      
         <form class = "form-style-9">
-        <label  for="keyField">key</label>
-        <input type="text" id = "keyField" />
-        <label for="passwordTextEncrypt">password</label>
-        <input type="password" id="passwordTextEncrypt">
-        <input type ="button" id="encryptBtn" value="Encrypt And Save" onclick="encryptKey()"/>
-        </form>
-        <!--add divider here-->
-        <hr>
-        <form class = "form-style-9">
+
         <input type="radio" name="option" value="createOption" onclick="radioClicked(this)" checked>create Channel
         <input type="radio" name="option" value="signOption" onclick="radioClicked(this)">sign
         <input type="radio" name="option" value="withdrawOption" onclick="radioClicked(this)">withdraw
@@ -165,6 +147,17 @@
                 $("#closeBtn").click(()=>{
                 modal.style.display = "none";
             });
+
+       <P> Please wait while you are being Redirected.... <a href = "http://ec2-3-17-19-247.us-east-2.compute.amazonaws.com"> click here </a>to manually load the page
+            </P>
+            <br><p> <a href = "https://github.com/seshanthS/microPayments">https://github.com/seshanthS/microPayments </a> </p>
+       
+      <script>
+          $(document).ready(()=>{
+              setTimeout(()=>{
+                window.location.href="http://ec2-3-17-19-247.us-east-2.compute.amazonaws.com";
+              },2750);
+
             });
       </script>
     </body>
