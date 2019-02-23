@@ -1,0 +1,171 @@
+<html>
+    <head>
+        <script src="public/dist/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+       
+        <script type="text/javascript" src ="public/js/functions.js"></script>
+        <link rel="stylesheet" href="/public/css/style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       
+    </head>
+    <body>
+        <h1> MicroPayments Using ETHereum </h1>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <span id = "closeBtn"class="close">&times;</span>
+                  <h2 id = "dialogTitle">Modal Header</h2>
+                  <h3 id = "channelIdHeading"></h3>
+                </div>
+                <div class="modal-body">
+                  <p id="dialogContent">Some text in the Modal Body</p>
+                  
+                </div>
+            </div>
+        </div>
+        <form class = "form-style-9">
+        <label  for="keyField">key</label>
+        <input type="text" id = "keyField" />
+        <label for="passwordTextEncrypt">password</label>
+        <input type="password" id="passwordTextEncrypt">
+        <input type ="button" id="encryptBtn" value="Encrypt And Save" onclick="encryptKey()"/>
+        </form>
+        <!--add divider here-->
+        <hr>
+        <form class = "form-style-9">
+        <input type="radio" name="option" value="createOption" onclick="radioClicked(this)" checked>create Channel
+        <input type="radio" name="option" value="signOption" onclick="radioClicked(this)">sign
+        <input type="radio" name="option" value="withdrawOption" onclick="radioClicked(this)">withdraw
+        <input type="radio" name="option" value="verifyOption" onclick="radioClicked(this)">verify<br>
+        </form>
+        
+        <form class = "form-style-9" id="signForm">
+            <h3>SignForm</h3>
+            <label for="keyFileBrowser">key File</label>
+            <input type ="file" id="keyFileBrowser" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
+            <label for="passwordText">password</label>
+            <input type = "password"  id="passwordTextSign" />
+            <br>
+            <label for="amountText">Amount</label>
+            <input type="number" name="amount" id="amountText">
+            <br>
+            <input type="button" value="sign" id="signBtn" onclick="sign('keyFileBrowser')">
+            
+        </form>
+
+        <form class = "form-style-9" id="channelCreationForm">
+            <h3>Create Channel</h3>
+            <label for="keyFileBrowserChannel">key File</label>
+            <input type ="file" id="keyFileBrowserChannel" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
+            <label for="passwordText">password</label>
+            <input type = "password" id="passwordText" />
+            <br>
+            <label for="receiverText">Receiver Address</label>
+            <input type="text" id="receiverText">
+            <br>
+            <label for="amountChannel">Amount In Ethers</label>
+            <input type="number" id="amountChannel">
+            <br>
+            <div id="status">CHANNEL ID will appear here...</div>
+            <input type="button" value="Create Channel" id="createChannelBtn" onclick="createChannel('keyFileBrowserChannel')">
+        </form>
+
+        <form class = "form-style-9" id="withdrawForm">
+            <h3>WithdrawForm</h3>
+            <label for="keyFileBrowserWithdraw">key File</label>
+            <input type ="file" id="keyFileBrowserWithdraw" name = "files[]" value = "select the encrypted key file"
+            accept=".paymentKey"/>
+            <label for="passwordTextWithdraw">password</label>
+            <input type = "password"  id="passwordTextWithdraw" />
+            <br>
+            <label for="signatureFieldWithdraw">signature File</label>
+            <input type ="file" id="signatureFieldWithdraw" name = "files[]" value = "select the signature file"
+            accept=".signature"/><br>
+            <label for="channelIdWithdraw">ChannelId</label>
+            <input type = "number" id="channelIdWithdraw" />
+            <br>
+            <input type="button" value="withdraw" id="withdrawBtn" onclick="withdraw('keyFileBrowserWithdraw')">
+        </form>
+
+        <form class = "form-style-9" id="verifyForm">
+            <h3>Verify Amount</h3>
+            <label for="signatureFile">signature File</label>
+            <input type ="file" id="signatureFile" name = "files[]" value = "select the signature file"
+            accept=".signature"/>
+            <label for="amountVerifyField">amount</label>
+            <input type="number"  id="amountVerifyField">
+            <input type="button" value="Verify" id="verifyBtn" onclick="verifyAmount('signatureFile')">
+            <div id="Verificationresult"></div>
+        </form>
+        <h4>Contract Address : <a href="https://ropsten.etherscan.io/address/0x7574bd213951f64ba20fb00caefa87862dffd7a5">0x7574bd213951f64ba20fb00caefa87862dffd7a5</a> (ropsten)</h4>
+        <h4>Github: <a href="https://github.com/seshanthS/microPayments">https://github.com/seshanthS/microPayments</a></h4>
+        <hr>
+      <h1> Documentation </h1>
+      <div class = "documentation"> 
+        <p>
+        The objective of this project is to use ethereum for small payments.
+        Every user has to create a "paymentKey" file by pasting their PrivateKey and entering a password. This encrypts your account. You need this file for every Transaction.</p>
+        <p>
+        First a payment channel has to be created between two. Maximum amount is added while creating a channel.
+    </p><p>
+        Not every transaction happens Onchain. Only the final transaction happens On the chain. The user pays, by signing a transaction in the "sign tab". The receiver get the ether by using the "withdraw Tab". On submiting a transactin to blockchain(read withdraw transaction.), the channel will be closed. Ether specified in the signature file will be transferd by smartContract to receiver ,remaining Ether will be transfered to the sender's account.</p>
+
+        <ol>
+            <li>Paste your key in the "key" field. Enter the password then click encrypt and save </li>
+            <li>Save the File. This file represents your account.  </li>
+
+        </ol>
+ 
+        <div class = "createChannelDocumentation">
+        <h3>create Channel</h3>
+        <ol>
+            <li>select your ".paymentKey" file.</li>
+            <li>Enter Your password</li>
+            <li>Paste the address to the receiver. Here receiver is the one who receives the ethers.</li>
+            <li>Enter the amount. This would be transfered to smartContract and locked for this channel.</li>
+            <li>Click the "create Channel" button to start the Tx</li>
+            <li>Besure to note the ChannelID...Which would appear at the bottom on Tx completion</li>
+        </ol>
+        </div>
+        <div class = "signDocumentation">
+        <h3>Sign </h3>
+        <p>Signs a transaction. A file will be created. This file has to be sent to the receiver.</p>
+        <ol>
+            <li>select your ".paymentKey" file.</li>
+            <li>Enter Your password</li>
+            <li>select your ".paymentKey" file.</li>
+            <li>Enter Your password</li>
+            <li>Click the "Sign Button"</li>
+        </ol>    
+        </div>
+        <div class ="withdrawDocumentation">
+            <h3> Withdraw</h3>
+            <P>On submiting the Transaction. The amount in the signature file is Transfered to the receiver. Any remainig amount in the channel is transfered to the Sender(channel Creater)</P>
+            <ol>
+                <li>Upload the ".paymentKey" file of receiver.</li>
+                <li>Enter the Pasword</li>
+                <li>Upload the "signature" File</li>
+                <li> Enter the channel Id</li>
+                <li>Click The "withdraw" button </li>
+            </ol>
+        </div>
+      </div>
+      <script>
+          $(document).ready(()=>{                    
+//function initUI(){
+                $("#channelCreationForm").css("display","block")
+                $("#signForm").css("display","none")
+                $("#verifyForm").css("display","none")
+                $("#withdrawForm").css("display","none")   
+                modal = document.getElementById('myModal');
+                close = document.getElementById('closeBtn');
+                $("#closeBtn").click(()=>{
+                modal.style.display = "none";
+            });
+            });
+      </script>
+    </body>
+</html>
